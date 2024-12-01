@@ -207,4 +207,15 @@ export class HelperFunctions {
 
     return originalSet;
   }
+
+  static getRumString(constraint: any): string {
+    let baseString = `${constraint.type.rumName}[${constraint.from}`;
+    if (constraint.to !== null) {
+      baseString += `, ${constraint.to}`;
+    }
+    baseString += "]";
+    baseString += "|".repeat(constraint.type.trailingPipes);
+
+    return baseString;
+  }
 }

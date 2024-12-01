@@ -1,4 +1,4 @@
-The following textual description follows the closed-world assumption, meaning that only the activities specified can be executed in the specified order. Any possible activity and execution that is not specified is considered impossible.
+export const GRAMMAR_TEST = `The following textual description follows the closed-world assumption, meaning that only the activities specified can be executed in the specified order. Any possible activity and execution that is not specified is considered impossible.
 Initially start "a".
 
 (asp): "c" and "d".
@@ -26,4 +26,4 @@ After "a" ends, eventually start "e".
 After "a" ends and "b" ends and (osp) ends, eventually start "e".
 After either "a" ends or "b" ends or (asp) ends, eventually start "e".
 
-After "x" ends, the process finishes.
+After "x" ends, the process finishes.`;

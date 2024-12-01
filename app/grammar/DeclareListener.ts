@@ -158,17 +158,13 @@ export class DeclareListener implements SentenceParser {
   }
 
   public printAndSaveModel(): void {
-    console.log("Activities: " + this.modelStorage.getTransitions());
-    console.log("Constraints: " + this.constraints);
-
-    const output: string[] = [];
-
+    let output: string = "";
     for (const activity of this.modelStorage.getTransitions()) {
-      output.push(`activity ${activity}\n`, activity);
+      output = output + `activity ${activity}\n`;
     }
 
     for (const constraint of this.constraints) {
-      output.push(`${JSON.parse(constraint).getRumString()}\n`);
+      output = output + `${HelperFunctions.getRumString(JSON.parse(constraint))}\n`;
     }
 
     this.modelStorage.setOutputText(output);
@@ -263,7 +259,6 @@ export class DeclareListener implements SentenceParser {
       .find((a) => this.activitiesToXORs.has(a.getName()))
       ?.getName()!;
     const xorTagsToRemove: string[] = [];
-
     for (const xorTag of this.activitiesToXORs.get(activityWithTag)!) {
       const isTagUsedByAllPostActivities = this.currentStatement
         .getPostActivities()
