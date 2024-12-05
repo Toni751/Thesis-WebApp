@@ -8,6 +8,7 @@ import { PetriNetListener } from "./grammar/PetriNetListener";
 import { DeclareListener } from "./grammar/DeclareListener";
 import { ContextListener } from "./grammar/ContextListener";
 import { SharedModelStorage } from "./grammar/SharedModelStorage";
+import { ERROR_MESSAGE } from "./constants";
 
 // the first element in the string is the .tpn file
 // the second element in the string is the .decl file
@@ -20,15 +21,19 @@ export async function getConvertedText(text: string): Promise<string[]> {
 
   for (const sentenceParser of sentenceParsers) {
     modelStorage.clear();
-    let inputStream = new ANTLRInputStream(text);
-    let lexer = new MScGrammarLexer(inputStream);
-    let tokenStream = new CommonTokenStream(lexer);
-    let parser = new MScGrammarParser(tokenStream);
+    try {
+      let inputStream = new ANTLRInputStream(text);
+      let lexer = new MScGrammarLexer(inputStream);
+      let tokenStream = new CommonTokenStream(lexer);
+      let parser = new MScGrammarParser(tokenStream);
 
-    const listener = new ContextListener(sentenceParser);
-    let tree = parser.description();
-    ParseTreeWalker.DEFAULT.walk(listener, tree);
-    conversions.push(modelStorage.getOutputText());
+      const listener = new ContextListener(sentenceParser);
+      let tree = parser.description();
+      ParseTreeWalker.DEFAULT.walk(listener, tree);
+      conversions.push(modelStorage.getOutputText());
+    } catch (error) {
+      conversions.push(ERROR_MESSAGE + error);
+    }
   }
 
   return conversions;

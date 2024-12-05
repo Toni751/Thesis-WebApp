@@ -259,6 +259,11 @@ export class DeclareListener implements SentenceParser {
       .find((a) => this.activitiesToXORs.has(a.getName()))
       ?.getName()!;
     const xorTagsToRemove: string[] = [];
+    if (!activityWithTag || !this.activitiesToXORs.has(activityWithTag)) {
+      throw new Error(
+        "Cannot generate declare model for sentences with multiple activities in both the left and the right part of a sentence."
+      );
+    }
     for (const xorTag of this.activitiesToXORs.get(activityWithTag)!) {
       const isTagUsedByAllPostActivities = this.currentStatement
         .getPostActivities()

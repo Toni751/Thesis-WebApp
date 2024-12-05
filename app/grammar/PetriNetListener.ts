@@ -232,7 +232,7 @@ export class PetriNetListener implements SentenceParser {
     let output: string = "";
     for (const place of this.places) {
       const init = place == PetriNetListener.INITIAL_PLACE ? "1" : "0";
-      output = output + `place ${place} init ${init}\n`;
+      output = output + `place ${place} init ${init};\n`;
     }
 
     for (const transition of this.modelStorage.getTransitions()) {

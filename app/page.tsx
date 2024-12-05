@@ -7,19 +7,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { GRAMMAR_TEST } from "./grammar/examples/input/grammar_test";
 import { getConvertedText } from "./actions";
 import { instance } from "@viz-js/viz";
+import { ERROR_MESSAGE } from "./constants";
 
+const PETRI_NET = "petriNet";
+const DECLARE = "declare";
 export default function Home() {
   const [text, setText] = useState(GRAMMAR_TEST);
-  // const [petriNet, setPetriNet] = useState("");
+  const [petriNet, setPetriNet] = useState("");
   const [declare, setDeclare] = useState("");
-  // const [tpnSvg, setTpnSvg] = useState<any>("");
 
   const handleConvert = async () => {
-    // console.log("Converting", text);
     const conversions = await getConvertedText(text);
-    // console.log("Conversions", conversions);
+    setPetriNet(conversions[0]);
     setDeclare(conversions[1]);
-    graphvizToSVG(tpn2graphviz(conversions[0]));
+    if (!conversions[0].startsWith(ERROR_MESSAGE)) {
+      graphvizToSVG(tpn2graphviz(conversions[0]));
+    }
   };
 
   const tpn2graphviz = (tpnData: string) => {
@@ -122,6 +125,30 @@ export default function Home() {
     });
   };
 
+  const handleDownloadFile = (type: string) => {
+    let model = "";
+    let fileName = "";
+    if (type === PETRI_NET) {
+      model = petriNet;
+      fileName = "PetriNet.tpn";
+    } else if (type === DECLARE) {
+      model = declare;
+      fileName = "DeclareModel.decl";
+    }
+
+    const fileBlob = new Blob([model], {
+      type: "text/plain",
+    });
+    const url = window.URL.createObjectURL(fileBlob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="flex flex-row gap-4 items-center justify-center w-full h-screen p-12">
       <div className="flex flex-col w-1/2 gap-1.5 h-full">
@@ -137,34 +164,49 @@ export default function Home() {
           Convert
         </button>
       </div>
-      <div className="w-1/2 flex flex-col h-full mb-16">
-        <Tabs defaultValue="petriNet" className="h-full">
+      <div className="w-1/2 flex flex-col h-full pb-16">
+        <Tabs
+          defaultValue={PETRI_NET}
+          className="h-full"
+          onValueChange={(v) => {
+            if (v === PETRI_NET && !petriNet.startsWith(ERROR_MESSAGE)) {
+              graphvizToSVG(tpn2graphviz(petriNet));
+            }
+          }}
+        >
           <TabsList className="w-full">
-            <TabsTrigger value="petriNet" className="w-1/2">
+            <TabsTrigger value={PETRI_NET} className="w-1/2">
               Petri Net
             </TabsTrigger>
-            <TabsTrigger value="declare" className="w-1/2">
+            <TabsTrigger value={DECLARE} className="w-1/2">
               Declare
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="petriNet" className="h-full">
-            {/* <Textarea
-              placeholder="The .tpn value of the Petri Net..."
-              id="message"
-              className="h-full"
-              value={petriNet}
-              disabled={true}
-            /> */}
+          <TabsContent value={PETRI_NET} className="h-full pb-6">
             <div id="graph" className="h-full overflow-auto"></div>
+            <button
+              className="w-full bg-blue-400 text-white rounded-md py-1 mt-2 hover:bg-blue-500 disabled:bg-blue-200"
+              disabled={petriNet.startsWith(ERROR_MESSAGE)}
+              onClick={() => handleDownloadFile(PETRI_NET)}
+            >
+              Download TPN file
+            </button>
           </TabsContent>
-          <TabsContent value="declare" className="h-full">
+          <TabsContent value={DECLARE} className="h-full pb-6">
             <Textarea
-              placeholder="The .tpn value of the Declare Model..."
+              placeholder="The .decl value of the Declare Model..."
               id="message"
-              className="h-full"
+              className={`h-full ${declare.startsWith(ERROR_MESSAGE) && "text-red-600"}`}
               value={declare}
               disabled={true}
             />
+            <button
+              className="w-full bg-blue-400 text-white rounded-md py-1 mt-2 hover:bg-blue-500 disabled:bg-blue-200"
+              disabled={declare.startsWith(ERROR_MESSAGE)}
+              onClick={() => handleDownloadFile(DECLARE)}
+            >
+              Download DECL file
+            </button>
           </TabsContent>
         </Tabs>
       </div>

@@ -214,7 +214,7 @@ export class HelperFunctions {
       baseString += `, ${constraint.to}`;
     }
     baseString += "]";
-    baseString += "|".repeat(constraint.type.trailingPipes);
+    baseString += " |".repeat(constraint.type.trailingPipes);
 
     return baseString;
   }
