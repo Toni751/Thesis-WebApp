@@ -225,9 +225,9 @@ export class PetriNetListener implements SentenceParser {
   }
 
   printAndSaveModel(): void {
-    console.log("Places: ", Array.from(this.places));
-    console.log("Transitions: ", this.modelStorage.getTransitions());
-    console.log("Flows: ", Array.from(this.flows));
+    // console.log("Places: ", Array.from(this.places));
+    // console.log("Transitions: ", this.modelStorage.getTransitions());
+    // console.log("Flows: ", Array.from(this.flows));
 
     let output: string = "";
     for (const place of this.places) {

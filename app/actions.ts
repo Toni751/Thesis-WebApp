@@ -9,6 +9,10 @@ import { DeclareListener } from "./grammar/DeclareListener";
 import { ContextListener } from "./grammar/ContextListener";
 import { SharedModelStorage } from "./grammar/SharedModelStorage";
 import { ERROR_MESSAGE } from "./constants";
+import { SYSTEM_TEXT } from "./grammar/systemText";
+import { openai } from "@ai-sdk/openai";
+import { jsonSchema, generateText, generateObject } from "ai";
+import { schema } from "./grammar/JsonSchemaActivities";
 
 // the first element in the string is the .tpn file
 // the second element in the string is the .decl file
@@ -37,4 +41,41 @@ export async function getConvertedText(text: string): Promise<string[]> {
   }
 
   return conversions;
+}
+
+export async function getNlTextConvertedToDialect(nlText: string): Promise<any> {
+  const shallowSchema = {
+    type: "object",
+    properties: {
+      convertedText: {
+        type: "string",
+        description: "The conversion of the input text to the target grammar.",
+      },
+    },
+    required: ["convertedText"],
+    additionalProperties: false,
+  };
+
+  const mySchema = jsonSchema<any>(shallowSchema);
+  // TODO: this is for the complex schema which tries to guarantee output syntactical correctness
+  // const mySchema = jsonSchema<any>(schema);
+
+  const result = await generateObject({
+    model: openai("gpt-4o-2024-11-20", {
+      structuredOutputs: true,
+    }),
+    schemaName: "dialect",
+    schemaDescription: "Representation of a text in the dialect described by the grammar",
+    schema: mySchema,
+    messages: [
+      { role: "system", content: SYSTEM_TEXT },
+      {
+        role: "user",
+        content: nlText,
+      },
+    ],
+  });
+
+  // console.log(result.object);
+  return result.object;
 }

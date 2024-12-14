@@ -1,28 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { GRAMMAR_TEST } from "./grammar/examples/input/grammar_test";
-import { getConvertedText } from "./actions";
+import { getConvertedText, getNlTextConvertedToDialect } from "./actions";
 import { instance } from "@viz-js/viz";
 import { ERROR_MESSAGE } from "./constants";
+import { EXAMPLE_NL_TEXT } from "./grammar/examples/input/example_nl_text";
+import { EXAMPLE_NL_TEXT_CONVERTED } from "./grammar/examples/input/example_nl_text_converted";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 const PETRI_NET = "petriNet";
 const DECLARE = "declare";
 export default function Home() {
-  const [text, setText] = useState(GRAMMAR_TEST);
+  const [text, setText] = useState(EXAMPLE_NL_TEXT_CONVERTED);
+  const [nlText, setNlText] = useState(EXAMPLE_NL_TEXT);
   const [petriNet, setPetriNet] = useState("");
   const [declare, setDeclare] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleConvert = async () => {
-    const conversions = await getConvertedText(text);
+  useEffect(() => {
+    handleConvert(EXAMPLE_NL_TEXT_CONVERTED);
+  }, []);
+
+  const handleConvert = async (textToConvert: string) => {
+    setIsLoading(true);
+
+    const conversions = await getConvertedText(textToConvert);
     setPetriNet(conversions[0]);
     setDeclare(conversions[1]);
     if (!conversions[0].startsWith(ERROR_MESSAGE)) {
       graphvizToSVG(tpn2graphviz(conversions[0]));
     }
+
+    setIsLoading(false);
   };
 
   const tpn2graphviz = (tpnData: string) => {
@@ -149,67 +161,103 @@ export default function Home() {
     window.URL.revokeObjectURL(url);
   };
 
+  const convertFreeTextToDialect = async (): Promise<void> => {
+    setIsLoading(true);
+
+    const response = await getNlTextConvertedToDialect(nlText);
+    setText(response.convertedText);
+    await handleConvert(response.convertedText);
+
+    setIsLoading(false);
+  };
+
   return (
-    <div className="flex flex-row gap-4 items-center justify-center w-full h-screen p-12">
-      <div className="flex flex-col w-1/2 gap-1.5 h-full">
-        <Label htmlFor="message">Text to be converted</Label>
-        <Textarea
-          placeholder="Type the text you want to be converted..."
-          id="message"
-          className="h-full"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-        <button className="w-full bg-slate-200 rounded-md py-1 mt-2 hover:bg-slate-300" onClick={() => handleConvert()}>
-          Convert
-        </button>
+    <div className="flex flex-col w-full h-screen gap-12 p-12">
+      <div className="flex flex-row gap-12 items-center justify-center h-1/2">
+        <div className="flex flex-col w-1/2 h-full gap-2">
+          <Label htmlFor="message">Prompt for AI to convert text into dialect and model</Label>
+          <Textarea
+            placeholder="Type a description of a business process..."
+            id="message"
+            className="h-full"
+            value={nlText}
+            onChange={(e) => setNlText(e.target.value)}
+          />
+          <button
+            className="bg-slate-200 rounded-md py-1 mt-2 hover:bg-slate-300"
+            onClick={() => convertFreeTextToDialect()}
+          >
+            Convert
+          </button>
+        </div>
+        <div className="flex flex-col w-1/2 h-full gap-2">
+          <Label htmlFor="message">Generated dialect</Label>
+          <Textarea
+            placeholder="Type the text, using our dialect, that you want to be converted..."
+            id="message"
+            className="h-full"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+          <button className="bg-slate-200 rounded-md py-1 mt-2 hover:bg-slate-300" onClick={() => handleConvert(text)}>
+            Convert
+          </button>
+        </div>
       </div>
-      <div className="w-1/2 flex flex-col h-full pb-16">
-        <Tabs
-          defaultValue={PETRI_NET}
-          className="h-full"
-          onValueChange={(v) => {
-            if (v === PETRI_NET && !petriNet.startsWith(ERROR_MESSAGE)) {
-              graphvizToSVG(tpn2graphviz(petriNet));
-            }
-          }}
-        >
-          <TabsList className="w-full">
-            <TabsTrigger value={PETRI_NET} className="w-1/2">
-              Petri Net
-            </TabsTrigger>
-            <TabsTrigger value={DECLARE} className="w-1/2">
-              Declare
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value={PETRI_NET} className="h-full pb-6">
-            <div id="graph" className="h-full overflow-auto"></div>
-            <button
-              className="w-full bg-blue-400 text-white rounded-md py-1 mt-2 hover:bg-blue-500 disabled:bg-blue-200"
-              disabled={petriNet.startsWith(ERROR_MESSAGE)}
-              onClick={() => handleDownloadFile(PETRI_NET)}
-            >
-              Download TPN file
-            </button>
-          </TabsContent>
-          <TabsContent value={DECLARE} className="h-full pb-6">
+      <Tabs
+        defaultValue={PETRI_NET}
+        className="h-1/2"
+        onValueChange={(v) => {
+          if (v === PETRI_NET && !petriNet.startsWith(ERROR_MESSAGE)) {
+            graphvizToSVG(tpn2graphviz(petriNet));
+          }
+        }}
+      >
+        <TabsList className="w-full">
+          <TabsTrigger value={PETRI_NET} className="w-1/2">
+            Petri Net
+          </TabsTrigger>
+          <TabsTrigger value={DECLARE} className="w-1/2">
+            Declare
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value={PETRI_NET} className="pb-6 h-full">
+          {petriNet.startsWith(ERROR_MESSAGE) ? (
             <Textarea
-              placeholder="The .decl value of the Declare Model..."
               id="message"
-              className={`h-full ${declare.startsWith(ERROR_MESSAGE) && "text-red-600"}`}
-              value={declare}
+              className={`h-[90%] w-full overflow-auto text-red-600`}
+              value={petriNet}
               disabled={true}
             />
-            <button
-              className="w-full bg-blue-400 text-white rounded-md py-1 mt-2 hover:bg-blue-500 disabled:bg-blue-200"
-              disabled={declare.startsWith(ERROR_MESSAGE)}
-              onClick={() => handleDownloadFile(DECLARE)}
-            >
-              Download DECL file
-            </button>
-          </TabsContent>
-        </Tabs>
-      </div>
+          ) : (
+            <div id="graph" className="h-[90%] w-full overflow-auto"></div>
+          )}
+          <button
+            className="bg-blue-400 text-white rounded-md py-1 mt-2 h-[10%] w-full hover:bg-blue-500 disabled:bg-blue-200"
+            disabled={petriNet.startsWith(ERROR_MESSAGE)}
+            onClick={() => handleDownloadFile(PETRI_NET)}
+          >
+            Download TPN file
+          </button>
+        </TabsContent>
+        <TabsContent value={DECLARE} className="pb-6 h-full">
+          <Textarea
+            placeholder="The .decl value of the Declare Model..."
+            id="message"
+            className={`h-[90%] w-full overflow-auto ${declare.startsWith(ERROR_MESSAGE) && "text-red-600"}`}
+            value={declare}
+            disabled={true}
+          />
+          <button
+            className="bg-blue-400 text-white rounded-md py-1 mt-2 h-[10%] w-full hover:bg-blue-500 disabled:bg-blue-200"
+            disabled={declare.startsWith(ERROR_MESSAGE)}
+            onClick={() => handleDownloadFile(DECLARE)}
+          >
+            Download DECL file
+          </button>
+        </TabsContent>
+      </Tabs>
+      {isLoading && <LoadingSpinner />}
     </div>
   );
 }

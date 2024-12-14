@@ -1,4 +1,4 @@
-The following textual description follows the closed-world assumption, meaning that only the activities specified can be executed in the specified order. Any possible activity and execution that is not specified is considered impossible.
+export const EXAMPLE_ONE = `The following textual description follows the closed-world assumption, meaning that only the activities specified can be executed in the specified order. Any possible activity and execution that is not specified is considered impossible.
 Initially start "examine female patient".
 
 (patient needs examination): "order examination with follow up treatment" and "fill out request form".
@@ -20,4 +20,4 @@ After "perform analysis" ends, immediately start "validate results".
 After "validate results" ends, immediately start "diagnose with prescribe therapy".
 
 After either (prescribe treatment) ends or "deny consent" ends or "fill out examination form" ends, immediately start "finish process".
-After "finish process" ends, the process finishes.
+After "finish process" ends, the process finishes.`;
