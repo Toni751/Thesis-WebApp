@@ -1,5 +1,7 @@
-export const SYSTEM_TEXT = `You will be provided with a free text description of a business process.  Convert the given text into a structured text which follows the grammar given below.  In the activity names include only the verb representing the action and the object targeted by the action, without the subject who performed the action. The focus is to extract the activities present in the text and the relationships between them, such as anteriority, posteriority, concurrency, choice. Provide your output in text which follows the grammar.
+export const SYSTEM_TEXT = `You will be provided with a free text description of a business process.
+Convert the given text into a structured text which follows the grammar given below between triple quotes. 
 
+"""
 grammar MScGrammar ;
 description
     : leadingStatement initialStatement (statementList)? closingStatement;
@@ -17,35 +19,29 @@ statement
     : (afterStatement | asp | osp) (NEWLINE)*;
 
 afterStatement
-    : 'After ' postActivityExpression ', ' (immediatelyExpression | eventuallyExpression) '.';
+    : (sequencePostActivityExpression | andPostActivityExpression | orPostActivityExpression) ', ' (sequencePreActivityExpression | andPreActivityExpression | orPreActivityExpression | repeatSincePreActivityExpression | eventuallyExpression) '.';
 asp
     : aspId ': ' activity ' and ' activity (' and ' activity)*? '.';
 osp
     : ospId ': ' activity ' or ' activity (' or ' activity)*? '.';
 
-immediatelyExpression
-    : 'immediately ' (sequencePreActivityExpression | andPreActivityExpression | orPreActivityExpression | repeatSincePreActivityExpression);
-eventuallyExpression
-    : 'eventually ' sequencePreActivityExpression;
-
 sequencePreActivityExpression
-    : 'start ' activity;
+    : 'immediately start ' activity;
 andPreActivityExpression
-    : 'start ' (activity | ospId) ' and start ' (activity | ospId) (' and start ' (activity | ospId))*? ;
+    : 'immediately start ' (activity | ospId) ' and start ' (activity | ospId) (' and start ' (activity | ospId))*? ;
 orPreActivityExpression
-    : 'either start ' (activity | aspId) ' or start ' (activity | aspId) (' or start ' (activity | aspId))*? ;
+    : 'immediately either start ' (activity | aspId) ' or start ' (activity | aspId) (' or start ' (activity | aspId))*? ;
 repeatSincePreActivityExpression
-    : 'either repeat since ' activity ' or start ' (activity | aspId) (' or start ' (activity | aspId))*?;
-
-postActivityExpression
-    : (sequencePostActivityExpression | andPostActivityExpression | orPostActivityExpression);
+    : 'immediately either repeat since ' activity ' or start ' (activity | aspId) (' or start ' (activity | aspId))*?;
+eventuallyExpression
+    : 'eventually start ' activity;
 
 sequencePostActivityExpression
-    : activity ' ends';
+    : 'After ' activity ' ends';
 andPostActivityExpression
-    : (activity | ospId) ' ends and ' ((activity | ospId) ' ends and ')*? (activity | ospId) ' ends';
+    : 'After ' (activity | ospId) ' ends and ' ((activity | ospId) ' ends and ')*? (activity | ospId) ' ends';
 orPostActivityExpression
-    : 'either ' (activity | aspId) ' ends or ' ((activity | aspId) ' ends or ')*? (activity | aspId) ' ends';
+    : 'After either ' (activity | aspId) ' ends or ' ((activity | aspId) ' ends or ')*? (activity | aspId) ' ends';
 
 activity
     : '"' WORD (SPACE WORD)*? '"' ;
@@ -54,8 +50,21 @@ aspId
 ospId
     : '(' WORD (SPACE WORD)*? ')' ;
 WORD
-    : [a-zA-Z0-9]+ ;// a sequence of alphabetic characters
+    : [a-zA-Z0-9]+ ;
 SPACE
     : ' ' | '_' ;
 NEWLINE
-    : '\r'? '\n' ;`;
+    : '\r'? '\n' ;"""
+    
+In addition to the grammar, follow these numbered semantics rules:
+1. In the activity names include only the verb representing the action and the object targeted by the action, without the subject who performed the action.
+2. Each activity must start exactly once and must end exactly one.
+3. Any "asp" or "osp" must de declared before it is used.
+4. Only start an "osp" or start an "osp" when there is at least one other activity to be started.
+5. Use "immediately either repeat since" only when you need to go back and start again an activity that has ended previously.
+
+Lastly, the focus is to extract the activities present in the text and the relationships between them, such as anteriority, posteriority, concurrency, choice. Provide your output in text which follows the grammar.
+`;
+
+// 5. In the initial statement start exactly one activity.
+// 6. In the closing statement end exactly one activity. If more activities need to end in the closing statement, introduce a silent activity that is started by the last activities and use that in the closing statement.
