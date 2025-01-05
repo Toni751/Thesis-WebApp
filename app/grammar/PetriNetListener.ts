@@ -48,10 +48,21 @@ export class PetriNetListener implements SentenceParser {
     );
   }
 
-  handleClosingStatement(closingTransition: TerminalNode[]): void {
+  handleClosingStatementSequence(): void {
+    const closingTransition = this.currentStatement.getPostActivities()[0].getName();
     this.flows.add(
-      JSON.stringify(new Flow(HelperFunctions.getActivityTextEnd(closingTransition), PetriNetListener.FINAL_PLACE))
+      JSON.stringify(new Flow(closingTransition + HelperFunctions.END_SUFFIX, PetriNetListener.FINAL_PLACE))
     );
+  }
+
+  handleClosingStatementAnd(): void {
+    const silentTransition = this.getSilentTransition("closing_and");
+    this.handlePostAnd(silentTransition, true);
+    this.flows.add(JSON.stringify(new Flow(silentTransition, PetriNetListener.FINAL_PLACE)));
+  }
+
+  handleClosingStatementOr(): void {
+    this.handlePostOr(PetriNetListener.FINAL_PLACE);
   }
 
   handleActivity(activityText: TerminalNode[]): void {
