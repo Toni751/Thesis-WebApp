@@ -4,19 +4,19 @@ Convert the given text into a structured text which follows the grammar given be
 """
 grammar MScGrammar ;
 description
-    : leadingStatement initialStatement (statementList)? closingStatement;
+    : leadingStatement initialStatement statementList;
 
 leadingStatement
     : 'The following textual description follows the closed-world assumption, meaning that only the activities specified can be executed in the specified order. Any possible activity and execution that is not specified is considered impossible.' (NEWLINE)*;
 initialStatement
     : 'Initially start ' activity '.' (NEWLINE)*;
-closingStatement
-    : 'After ' activity ' ends, the process finishes.' ;
 
 statementList
     : statement (statement)*?;
 statement
-    : (afterStatement | asp | osp) (NEWLINE)*;
+    : (afterStatement | closingStatement | asp | osp) (NEWLINE)*;
+closingStatement
+    : (sequencePostActivityExpression | andPostActivityExpression | orPostActivityExpression) ', the process finishes.' ;
 
 afterStatement
     : (sequencePostActivityExpression | andPostActivityExpression | orPostActivityExpression) ', ' (sequencePreActivityExpression | andPreActivityExpression | orPreActivityExpression | repeatSincePreActivityExpression | eventuallyExpression) '.';

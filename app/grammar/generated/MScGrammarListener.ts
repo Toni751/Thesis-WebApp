@@ -6,9 +6,9 @@ import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 import { DescriptionContext } from "./MScGrammarParser";
 import { LeadingStatementContext } from "./MScGrammarParser";
 import { InitialStatementContext } from "./MScGrammarParser";
-import { ClosingStatementContext } from "./MScGrammarParser";
 import { StatementListContext } from "./MScGrammarParser";
 import { StatementContext } from "./MScGrammarParser";
+import { ClosingStatementContext } from "./MScGrammarParser";
 import { AfterStatementContext } from "./MScGrammarParser";
 import { AspContext } from "./MScGrammarParser";
 import { OspContext } from "./MScGrammarParser";
@@ -66,17 +66,6 @@ export interface MScGrammarListener extends ParseTreeListener {
 	exitInitialStatement?: (ctx: InitialStatementContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `MScGrammarParser.closingStatement`.
-	 * @param ctx the parse tree
-	 */
-	enterClosingStatement?: (ctx: ClosingStatementContext) => void;
-	/**
-	 * Exit a parse tree produced by `MScGrammarParser.closingStatement`.
-	 * @param ctx the parse tree
-	 */
-	exitClosingStatement?: (ctx: ClosingStatementContext) => void;
-
-	/**
 	 * Enter a parse tree produced by `MScGrammarParser.statementList`.
 	 * @param ctx the parse tree
 	 */
@@ -97,6 +86,17 @@ export interface MScGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitStatement?: (ctx: StatementContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `MScGrammarParser.closingStatement`.
+	 * @param ctx the parse tree
+	 */
+	enterClosingStatement?: (ctx: ClosingStatementContext) => void;
+	/**
+	 * Exit a parse tree produced by `MScGrammarParser.closingStatement`.
+	 * @param ctx the parse tree
+	 */
+	exitClosingStatement?: (ctx: ClosingStatementContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `MScGrammarParser.afterStatement`.

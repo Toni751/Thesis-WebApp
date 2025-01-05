@@ -6,7 +6,9 @@ export interface SentenceParser {
   setStatementMetadata: (statementMetadata: StatementMetadata) => void;
 
   handleInitialStatement: (initialTransition: TerminalNode[]) => void;
-  handleClosingStatement: (closingTransition: TerminalNode[]) => void;
+  handleClosingStatementSequence: () => void;
+  handleClosingStatementAnd: () => void;
+  handleClosingStatementOr: () => void;
   handleActivity: (activityText: TerminalNode[]) => void;
   handleAspDeclaration: (aspId: string) => void;
   handleOspDeclaration: (ospId: string) => void;

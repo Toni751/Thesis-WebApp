@@ -39,7 +39,11 @@ export class DeclareListener implements SentenceParser {
     );
   }
 
-  public handleClosingStatement(closingTransition: TerminalNode[]): void {}
+  public handleClosingStatementSequence(): void {}
+
+  public handleClosingStatementAnd(): void {}
+
+  public handleClosingStatementOr(): void {}
 
   public handleActivity(activityText: TerminalNode[]): void {
     this.modelStorage.addTransition(HelperFunctions.getActivityText(activityText));

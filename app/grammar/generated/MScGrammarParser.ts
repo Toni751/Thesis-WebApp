@@ -55,9 +55,9 @@ export class MScGrammarParser extends Parser {
 	public static readonly RULE_description = 0;
 	public static readonly RULE_leadingStatement = 1;
 	public static readonly RULE_initialStatement = 2;
-	public static readonly RULE_closingStatement = 3;
-	public static readonly RULE_statementList = 4;
-	public static readonly RULE_statement = 5;
+	public static readonly RULE_statementList = 3;
+	public static readonly RULE_statement = 4;
+	public static readonly RULE_closingStatement = 5;
 	public static readonly RULE_afterStatement = 6;
 	public static readonly RULE_asp = 7;
 	public static readonly RULE_osp = 8;
@@ -76,8 +76,8 @@ export class MScGrammarParser extends Parser {
 	public static readonly RULE_ospId = 21;
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
-		"description", "leadingStatement", "initialStatement", "closingStatement", 
-		"statementList", "statement", "afterStatement", "asp", "osp", "immediatelyExpression", 
+		"description", "leadingStatement", "initialStatement", "statementList", 
+		"statement", "closingStatement", "afterStatement", "asp", "osp", "immediatelyExpression", 
 		"eventuallyExpression", "sequencePreActivityExpression", "andPreActivityExpression", 
 		"orPreActivityExpression", "repeatSincePreActivityExpression", "postActivityExpression", 
 		"sequencePostActivityExpression", "andPostActivityExpression", "orPostActivityExpression", 
@@ -86,7 +86,7 @@ export class MScGrammarParser extends Parser {
 
 	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
 		undefined, "'The following textual description follows the closed-world assumption, meaning that only the activities specified can be executed in the specified order. Any possible activity and execution that is not specified is considered impossible.'", 
-		"'Initially start '", "'.'", "'After '", "' ends, the process finishes.'", 
+		"'Initially start '", "'.'", "'After '", "', the process finishes.'", 
 		"', '", "': '", "' and '", "' or '", "'immediately '", "'eventually '", 
 		"'start '", "' and start '", "'either start '", "' or start '", "'either repeat since '", 
 		"' ends'", "' ends and '", "'either '", "' ends or '", "'\"'", "'('", 
@@ -135,18 +135,8 @@ export class MScGrammarParser extends Parser {
 			this.leadingStatement();
 			this.state = 45;
 			this.initialStatement();
-			this.state = 47;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 0, this._ctx) ) {
-			case 1:
-				{
-				this.state = 46;
-				this.statementList();
-				}
-				break;
-			}
-			this.state = 49;
-			this.closingStatement();
+			this.state = 46;
+			this.statementList();
 			}
 		}
 		catch (re) {
@@ -171,19 +161,19 @@ export class MScGrammarParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 51;
+			this.state = 48;
 			this.match(MScGrammarParser.T__0);
-			this.state = 55;
+			this.state = 52;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			while (_la === MScGrammarParser.NEWLINE) {
 				{
 				{
-				this.state = 52;
+				this.state = 49;
 				this.match(MScGrammarParser.NEWLINE);
 				}
 				}
-				this.state = 57;
+				this.state = 54;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
@@ -211,23 +201,134 @@ export class MScGrammarParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 58;
+			this.state = 55;
 			this.match(MScGrammarParser.T__1);
-			this.state = 59;
+			this.state = 56;
 			this.activity();
-			this.state = 60;
+			this.state = 57;
 			this.match(MScGrammarParser.T__2);
-			this.state = 64;
+			this.state = 61;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			while (_la === MScGrammarParser.NEWLINE) {
 				{
 				{
-				this.state = 61;
+				this.state = 58;
 				this.match(MScGrammarParser.NEWLINE);
 				}
 				}
-				this.state = 66;
+				this.state = 63;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public statementList(): StatementListContext {
+		let _localctx: StatementListContext = new StatementListContext(this._ctx, this.state);
+		this.enterRule(_localctx, 6, MScGrammarParser.RULE_statementList);
+		try {
+			let _alt: number;
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 64;
+			this.statement();
+			this.state = 68;
+			this._errHandler.sync(this);
+			_alt = this.interpreter.adaptivePredict(this._input, 2, this._ctx);
+			while (_alt !== 1 && _alt !== ATN.INVALID_ALT_NUMBER) {
+				if (_alt === 1 + 1) {
+					{
+					{
+					this.state = 65;
+					this.statement();
+					}
+					}
+				}
+				this.state = 70;
+				this._errHandler.sync(this);
+				_alt = this.interpreter.adaptivePredict(this._input, 2, this._ctx);
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public statement(): StatementContext {
+		let _localctx: StatementContext = new StatementContext(this._ctx, this.state);
+		this.enterRule(_localctx, 8, MScGrammarParser.RULE_statement);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 75;
+			this._errHandler.sync(this);
+			switch ( this.interpreter.adaptivePredict(this._input, 3, this._ctx) ) {
+			case 1:
+				{
+				this.state = 71;
+				this.afterStatement();
+				}
+				break;
+
+			case 2:
+				{
+				this.state = 72;
+				this.closingStatement();
+				}
+				break;
+
+			case 3:
+				{
+				this.state = 73;
+				this.asp();
+				}
+				break;
+
+			case 4:
+				{
+				this.state = 74;
+				this.osp();
+				}
+				break;
+			}
+			this.state = 80;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while (_la === MScGrammarParser.NEWLINE) {
+				{
+				{
+				this.state = 77;
+				this.match(MScGrammarParser.NEWLINE);
+				}
+				}
+				this.state = 82;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
@@ -250,120 +351,16 @@ export class MScGrammarParser extends Parser {
 	// @RuleVersion(0)
 	public closingStatement(): ClosingStatementContext {
 		let _localctx: ClosingStatementContext = new ClosingStatementContext(this._ctx, this.state);
-		this.enterRule(_localctx, 6, MScGrammarParser.RULE_closingStatement);
+		this.enterRule(_localctx, 10, MScGrammarParser.RULE_closingStatement);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 67;
+			this.state = 83;
 			this.match(MScGrammarParser.T__3);
-			this.state = 68;
-			this.activity();
-			this.state = 69;
+			this.state = 84;
+			this.postActivityExpression();
+			this.state = 85;
 			this.match(MScGrammarParser.T__4);
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public statementList(): StatementListContext {
-		let _localctx: StatementListContext = new StatementListContext(this._ctx, this.state);
-		this.enterRule(_localctx, 8, MScGrammarParser.RULE_statementList);
-		try {
-			let _alt: number;
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 71;
-			this.statement();
-			this.state = 75;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 3, this._ctx);
-			while (_alt !== 1 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1 + 1) {
-					{
-					{
-					this.state = 72;
-					this.statement();
-					}
-					}
-				}
-				this.state = 77;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 3, this._ctx);
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public statement(): StatementContext {
-		let _localctx: StatementContext = new StatementContext(this._ctx, this.state);
-		this.enterRule(_localctx, 10, MScGrammarParser.RULE_statement);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 81;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 4, this._ctx) ) {
-			case 1:
-				{
-				this.state = 78;
-				this.afterStatement();
-				}
-				break;
-
-			case 2:
-				{
-				this.state = 79;
-				this.asp();
-				}
-				break;
-
-			case 3:
-				{
-				this.state = 80;
-				this.osp();
-				}
-				break;
-			}
-			this.state = 86;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === MScGrammarParser.NEWLINE) {
-				{
-				{
-				this.state = 83;
-				this.match(MScGrammarParser.NEWLINE);
-				}
-				}
-				this.state = 88;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-			}
 			}
 		}
 		catch (re) {
@@ -387,31 +384,31 @@ export class MScGrammarParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 89;
+			this.state = 87;
 			this.match(MScGrammarParser.T__3);
-			this.state = 90;
+			this.state = 88;
 			this.postActivityExpression();
-			this.state = 91;
+			this.state = 89;
 			this.match(MScGrammarParser.T__5);
-			this.state = 94;
+			this.state = 92;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case MScGrammarParser.T__9:
 				{
-				this.state = 92;
+				this.state = 90;
 				this.immediatelyExpression();
 				}
 				break;
 			case MScGrammarParser.T__10:
 				{
-				this.state = 93;
+				this.state = 91;
 				this.eventuallyExpression();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			this.state = 96;
+			this.state = 94;
 			this.match(MScGrammarParser.T__2);
 			}
 		}
@@ -437,35 +434,35 @@ export class MScGrammarParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 98;
+			this.state = 96;
 			this.aspId();
-			this.state = 99;
+			this.state = 97;
 			this.match(MScGrammarParser.T__6);
+			this.state = 98;
+			this.activity();
+			this.state = 99;
+			this.match(MScGrammarParser.T__7);
 			this.state = 100;
 			this.activity();
-			this.state = 101;
-			this.match(MScGrammarParser.T__7);
-			this.state = 102;
-			this.activity();
-			this.state = 107;
+			this.state = 105;
 			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 7, this._ctx);
+			_alt = this.interpreter.adaptivePredict(this._input, 6, this._ctx);
 			while (_alt !== 1 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1 + 1) {
 					{
 					{
-					this.state = 103;
+					this.state = 101;
 					this.match(MScGrammarParser.T__7);
-					this.state = 104;
+					this.state = 102;
 					this.activity();
 					}
 					}
 				}
-				this.state = 109;
+				this.state = 107;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 7, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 6, this._ctx);
 			}
-			this.state = 110;
+			this.state = 108;
 			this.match(MScGrammarParser.T__2);
 			}
 		}
@@ -491,35 +488,35 @@ export class MScGrammarParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 112;
+			this.state = 110;
 			this.ospId();
-			this.state = 113;
+			this.state = 111;
 			this.match(MScGrammarParser.T__6);
+			this.state = 112;
+			this.activity();
+			this.state = 113;
+			this.match(MScGrammarParser.T__8);
 			this.state = 114;
 			this.activity();
-			this.state = 115;
-			this.match(MScGrammarParser.T__8);
-			this.state = 116;
-			this.activity();
-			this.state = 121;
+			this.state = 119;
 			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 8, this._ctx);
+			_alt = this.interpreter.adaptivePredict(this._input, 7, this._ctx);
 			while (_alt !== 1 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1 + 1) {
 					{
 					{
-					this.state = 117;
+					this.state = 115;
 					this.match(MScGrammarParser.T__8);
-					this.state = 118;
+					this.state = 116;
 					this.activity();
 					}
 					}
 				}
-				this.state = 123;
+				this.state = 121;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 8, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 7, this._ctx);
 			}
-			this.state = 124;
+			this.state = 122;
 			this.match(MScGrammarParser.T__2);
 			}
 		}
@@ -544,35 +541,35 @@ export class MScGrammarParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 126;
+			this.state = 124;
 			this.match(MScGrammarParser.T__9);
-			this.state = 131;
+			this.state = 129;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 9, this._ctx) ) {
+			switch ( this.interpreter.adaptivePredict(this._input, 8, this._ctx) ) {
 			case 1:
 				{
-				this.state = 127;
+				this.state = 125;
 				this.sequencePreActivityExpression();
 				}
 				break;
 
 			case 2:
 				{
-				this.state = 128;
+				this.state = 126;
 				this.andPreActivityExpression();
 				}
 				break;
 
 			case 3:
 				{
-				this.state = 129;
+				this.state = 127;
 				this.orPreActivityExpression();
 				}
 				break;
 
 			case 4:
 				{
-				this.state = 130;
+				this.state = 128;
 				this.repeatSincePreActivityExpression();
 				}
 				break;
@@ -600,9 +597,9 @@ export class MScGrammarParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 133;
+			this.state = 131;
 			this.match(MScGrammarParser.T__10);
-			this.state = 134;
+			this.state = 132;
 			this.sequencePreActivityExpression();
 			}
 		}
@@ -627,9 +624,9 @@ export class MScGrammarParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 136;
+			this.state = 134;
 			this.match(MScGrammarParser.T__11);
-			this.state = 137;
+			this.state = 135;
 			this.activity();
 			}
 		}
@@ -655,67 +652,67 @@ export class MScGrammarParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 139;
+			this.state = 137;
 			this.match(MScGrammarParser.T__11);
+			this.state = 140;
+			this._errHandler.sync(this);
+			switch (this._input.LA(1)) {
+			case MScGrammarParser.T__20:
+				{
+				this.state = 138;
+				this.activity();
+				}
+				break;
+			case MScGrammarParser.T__21:
+				{
+				this.state = 139;
+				this.ospId();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
 			this.state = 142;
-			this._errHandler.sync(this);
-			switch (this._input.LA(1)) {
-			case MScGrammarParser.T__20:
-				{
-				this.state = 140;
-				this.activity();
-				}
-				break;
-			case MScGrammarParser.T__21:
-				{
-				this.state = 141;
-				this.ospId();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-			this.state = 144;
 			this.match(MScGrammarParser.T__12);
-			this.state = 147;
+			this.state = 145;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case MScGrammarParser.T__20:
 				{
-				this.state = 145;
+				this.state = 143;
 				this.activity();
 				}
 				break;
 			case MScGrammarParser.T__21:
 				{
-				this.state = 146;
+				this.state = 144;
 				this.ospId();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			this.state = 156;
+			this.state = 154;
 			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 13, this._ctx);
+			_alt = this.interpreter.adaptivePredict(this._input, 12, this._ctx);
 			while (_alt !== 1 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1 + 1) {
 					{
 					{
-					this.state = 149;
+					this.state = 147;
 					this.match(MScGrammarParser.T__12);
-					this.state = 152;
+					this.state = 150;
 					this._errHandler.sync(this);
 					switch (this._input.LA(1)) {
 					case MScGrammarParser.T__20:
 						{
-						this.state = 150;
+						this.state = 148;
 						this.activity();
 						}
 						break;
 					case MScGrammarParser.T__21:
 						{
-						this.state = 151;
+						this.state = 149;
 						this.ospId();
 						}
 						break;
@@ -725,9 +722,9 @@ export class MScGrammarParser extends Parser {
 					}
 					}
 				}
-				this.state = 158;
+				this.state = 156;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 13, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 12, this._ctx);
 			}
 			}
 		}
@@ -753,67 +750,67 @@ export class MScGrammarParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 159;
+			this.state = 157;
 			this.match(MScGrammarParser.T__13);
+			this.state = 160;
+			this._errHandler.sync(this);
+			switch (this._input.LA(1)) {
+			case MScGrammarParser.T__20:
+				{
+				this.state = 158;
+				this.activity();
+				}
+				break;
+			case MScGrammarParser.T__21:
+				{
+				this.state = 159;
+				this.aspId();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
 			this.state = 162;
-			this._errHandler.sync(this);
-			switch (this._input.LA(1)) {
-			case MScGrammarParser.T__20:
-				{
-				this.state = 160;
-				this.activity();
-				}
-				break;
-			case MScGrammarParser.T__21:
-				{
-				this.state = 161;
-				this.aspId();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-			this.state = 164;
 			this.match(MScGrammarParser.T__14);
-			this.state = 167;
+			this.state = 165;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case MScGrammarParser.T__20:
 				{
-				this.state = 165;
+				this.state = 163;
 				this.activity();
 				}
 				break;
 			case MScGrammarParser.T__21:
 				{
-				this.state = 166;
+				this.state = 164;
 				this.aspId();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			this.state = 176;
+			this.state = 174;
 			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 17, this._ctx);
+			_alt = this.interpreter.adaptivePredict(this._input, 16, this._ctx);
 			while (_alt !== 1 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1 + 1) {
 					{
 					{
-					this.state = 169;
+					this.state = 167;
 					this.match(MScGrammarParser.T__14);
-					this.state = 172;
+					this.state = 170;
 					this._errHandler.sync(this);
 					switch (this._input.LA(1)) {
 					case MScGrammarParser.T__20:
 						{
-						this.state = 170;
+						this.state = 168;
 						this.activity();
 						}
 						break;
 					case MScGrammarParser.T__21:
 						{
-						this.state = 171;
+						this.state = 169;
 						this.aspId();
 						}
 						break;
@@ -823,9 +820,9 @@ export class MScGrammarParser extends Parser {
 					}
 					}
 				}
-				this.state = 178;
+				this.state = 176;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 17, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 16, this._ctx);
 			}
 			}
 		}
@@ -851,51 +848,51 @@ export class MScGrammarParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 179;
+			this.state = 177;
 			this.match(MScGrammarParser.T__15);
-			this.state = 180;
+			this.state = 178;
 			this.activity();
-			this.state = 181;
+			this.state = 179;
 			this.match(MScGrammarParser.T__14);
-			this.state = 184;
+			this.state = 182;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case MScGrammarParser.T__20:
 				{
-				this.state = 182;
+				this.state = 180;
 				this.activity();
 				}
 				break;
 			case MScGrammarParser.T__21:
 				{
-				this.state = 183;
+				this.state = 181;
 				this.aspId();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			this.state = 193;
+			this.state = 191;
 			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 20, this._ctx);
+			_alt = this.interpreter.adaptivePredict(this._input, 19, this._ctx);
 			while (_alt !== 1 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1 + 1) {
 					{
 					{
-					this.state = 186;
+					this.state = 184;
 					this.match(MScGrammarParser.T__14);
-					this.state = 189;
+					this.state = 187;
 					this._errHandler.sync(this);
 					switch (this._input.LA(1)) {
 					case MScGrammarParser.T__20:
 						{
-						this.state = 187;
+						this.state = 185;
 						this.activity();
 						}
 						break;
 					case MScGrammarParser.T__21:
 						{
-						this.state = 188;
+						this.state = 186;
 						this.aspId();
 						}
 						break;
@@ -905,9 +902,9 @@ export class MScGrammarParser extends Parser {
 					}
 					}
 				}
-				this.state = 195;
+				this.state = 193;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 20, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 19, this._ctx);
 			}
 			}
 		}
@@ -932,26 +929,26 @@ export class MScGrammarParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 199;
+			this.state = 197;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 21, this._ctx) ) {
+			switch ( this.interpreter.adaptivePredict(this._input, 20, this._ctx) ) {
 			case 1:
 				{
-				this.state = 196;
+				this.state = 194;
 				this.sequencePostActivityExpression();
 				}
 				break;
 
 			case 2:
 				{
-				this.state = 197;
+				this.state = 195;
 				this.andPostActivityExpression();
 				}
 				break;
 
 			case 3:
 				{
-				this.state = 198;
+				this.state = 196;
 				this.orPostActivityExpression();
 				}
 				break;
@@ -979,9 +976,9 @@ export class MScGrammarParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 201;
+			this.state = 199;
 			this.activity();
-			this.state = 202;
+			this.state = 200;
 			this.match(MScGrammarParser.T__16);
 			}
 		}
@@ -1007,79 +1004,79 @@ export class MScGrammarParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 206;
+			this.state = 204;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case MScGrammarParser.T__20:
 				{
-				this.state = 204;
+				this.state = 202;
 				this.activity();
 				}
 				break;
 			case MScGrammarParser.T__21:
 				{
-				this.state = 205;
+				this.state = 203;
 				this.ospId();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			this.state = 208;
+			this.state = 206;
 			this.match(MScGrammarParser.T__17);
-			this.state = 217;
+			this.state = 215;
 			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 24, this._ctx);
+			_alt = this.interpreter.adaptivePredict(this._input, 23, this._ctx);
 			while (_alt !== 1 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1 + 1) {
 					{
 					{
-					this.state = 211;
+					this.state = 209;
 					this._errHandler.sync(this);
 					switch (this._input.LA(1)) {
 					case MScGrammarParser.T__20:
 						{
-						this.state = 209;
+						this.state = 207;
 						this.activity();
 						}
 						break;
 					case MScGrammarParser.T__21:
 						{
-						this.state = 210;
+						this.state = 208;
 						this.ospId();
 						}
 						break;
 					default:
 						throw new NoViableAltException(this);
 					}
-					this.state = 213;
+					this.state = 211;
 					this.match(MScGrammarParser.T__17);
 					}
 					}
 				}
-				this.state = 219;
+				this.state = 217;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 24, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 23, this._ctx);
 			}
-			this.state = 222;
+			this.state = 220;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case MScGrammarParser.T__20:
 				{
-				this.state = 220;
+				this.state = 218;
 				this.activity();
 				}
 				break;
 			case MScGrammarParser.T__21:
 				{
-				this.state = 221;
+				this.state = 219;
 				this.ospId();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			this.state = 224;
+			this.state = 222;
 			this.match(MScGrammarParser.T__16);
 			}
 		}
@@ -1105,81 +1102,81 @@ export class MScGrammarParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 226;
+			this.state = 224;
 			this.match(MScGrammarParser.T__18);
-			this.state = 229;
+			this.state = 227;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case MScGrammarParser.T__20:
 				{
-				this.state = 227;
+				this.state = 225;
 				this.activity();
 				}
 				break;
 			case MScGrammarParser.T__21:
 				{
-				this.state = 228;
+				this.state = 226;
 				this.aspId();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			this.state = 231;
+			this.state = 229;
 			this.match(MScGrammarParser.T__19);
-			this.state = 240;
+			this.state = 238;
 			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 28, this._ctx);
+			_alt = this.interpreter.adaptivePredict(this._input, 27, this._ctx);
 			while (_alt !== 1 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1 + 1) {
 					{
 					{
-					this.state = 234;
+					this.state = 232;
 					this._errHandler.sync(this);
 					switch (this._input.LA(1)) {
 					case MScGrammarParser.T__20:
 						{
-						this.state = 232;
+						this.state = 230;
 						this.activity();
 						}
 						break;
 					case MScGrammarParser.T__21:
 						{
-						this.state = 233;
+						this.state = 231;
 						this.aspId();
 						}
 						break;
 					default:
 						throw new NoViableAltException(this);
 					}
-					this.state = 236;
+					this.state = 234;
 					this.match(MScGrammarParser.T__19);
 					}
 					}
 				}
-				this.state = 242;
+				this.state = 240;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 28, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 27, this._ctx);
 			}
-			this.state = 245;
+			this.state = 243;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case MScGrammarParser.T__20:
 				{
-				this.state = 243;
+				this.state = 241;
 				this.activity();
 				}
 				break;
 			case MScGrammarParser.T__21:
 				{
-				this.state = 244;
+				this.state = 242;
 				this.aspId();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			this.state = 247;
+			this.state = 245;
 			this.match(MScGrammarParser.T__16);
 			}
 		}
@@ -1205,29 +1202,29 @@ export class MScGrammarParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 249;
+			this.state = 247;
 			this.match(MScGrammarParser.T__20);
-			this.state = 250;
+			this.state = 248;
 			this.match(MScGrammarParser.WORD);
-			this.state = 255;
+			this.state = 253;
 			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 30, this._ctx);
+			_alt = this.interpreter.adaptivePredict(this._input, 29, this._ctx);
 			while (_alt !== 1 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1 + 1) {
 					{
 					{
-					this.state = 251;
+					this.state = 249;
 					this.match(MScGrammarParser.SPACE);
-					this.state = 252;
+					this.state = 250;
 					this.match(MScGrammarParser.WORD);
 					}
 					}
 				}
-				this.state = 257;
+				this.state = 255;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 30, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 29, this._ctx);
 			}
-			this.state = 258;
+			this.state = 256;
 			this.match(MScGrammarParser.T__20);
 			}
 		}
@@ -1253,29 +1250,29 @@ export class MScGrammarParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 260;
+			this.state = 258;
 			this.match(MScGrammarParser.T__21);
-			this.state = 261;
+			this.state = 259;
 			this.match(MScGrammarParser.WORD);
-			this.state = 266;
+			this.state = 264;
 			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 31, this._ctx);
+			_alt = this.interpreter.adaptivePredict(this._input, 30, this._ctx);
 			while (_alt !== 1 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1 + 1) {
 					{
 					{
-					this.state = 262;
+					this.state = 260;
 					this.match(MScGrammarParser.SPACE);
-					this.state = 263;
+					this.state = 261;
 					this.match(MScGrammarParser.WORD);
 					}
 					}
 				}
-				this.state = 268;
+				this.state = 266;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 31, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 30, this._ctx);
 			}
-			this.state = 269;
+			this.state = 267;
 			this.match(MScGrammarParser.T__22);
 			}
 		}
@@ -1301,29 +1298,29 @@ export class MScGrammarParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 271;
+			this.state = 269;
 			this.match(MScGrammarParser.T__21);
-			this.state = 272;
+			this.state = 270;
 			this.match(MScGrammarParser.WORD);
-			this.state = 277;
+			this.state = 275;
 			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 32, this._ctx);
+			_alt = this.interpreter.adaptivePredict(this._input, 31, this._ctx);
 			while (_alt !== 1 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1 + 1) {
 					{
 					{
-					this.state = 273;
+					this.state = 271;
 					this.match(MScGrammarParser.SPACE);
-					this.state = 274;
+					this.state = 272;
 					this.match(MScGrammarParser.WORD);
 					}
 					}
 				}
-				this.state = 279;
+				this.state = 277;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 32, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 31, this._ctx);
 			}
-			this.state = 280;
+			this.state = 278;
 			this.match(MScGrammarParser.T__22);
 			}
 		}
@@ -1343,134 +1340,133 @@ export class MScGrammarParser extends Parser {
 	}
 
 	public static readonly _serializedATN: string =
-		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03\x1C\u011D\x04" +
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03\x1C\u011B\x04" +
 		"\x02\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04" +
 		"\x07\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r\t\r" +
 		"\x04\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x04\x11\t\x11\x04\x12\t\x12" +
 		"\x04\x13\t\x13\x04\x14\t\x14\x04\x15\t\x15\x04\x16\t\x16\x04\x17\t\x17" +
-		"\x03\x02\x03\x02\x03\x02\x05\x022\n\x02\x03\x02\x03\x02\x03\x03\x03\x03" +
-		"\x07\x038\n\x03\f\x03\x0E\x03;\v\x03\x03\x04\x03\x04\x03\x04\x03\x04\x07" +
-		"\x04A\n\x04\f\x04\x0E\x04D\v\x04\x03\x05\x03\x05\x03\x05\x03\x05\x03\x06" +
-		"\x03\x06\x07\x06L\n\x06\f\x06\x0E\x06O\v\x06\x03\x07\x03\x07\x03\x07\x05" +
-		"\x07T\n\x07\x03\x07\x07\x07W\n\x07\f\x07\x0E\x07Z\v\x07\x03\b\x03\b\x03" +
-		"\b\x03\b\x03\b\x05\ba\n\b\x03\b\x03\b\x03\t\x03\t\x03\t\x03\t\x03\t\x03" +
-		"\t\x03\t\x07\tl\n\t\f\t\x0E\to\v\t\x03\t\x03\t\x03\n\x03\n\x03\n\x03\n" +
-		"\x03\n\x03\n\x03\n\x07\nz\n\n\f\n\x0E\n}\v\n\x03\n\x03\n\x03\v\x03\v\x03" +
-		"\v\x03\v\x03\v\x05\v\x86\n\v\x03\f\x03\f\x03\f\x03\r\x03\r\x03\r\x03\x0E" +
-		"\x03\x0E\x03\x0E\x05\x0E\x91\n\x0E\x03\x0E\x03\x0E\x03\x0E\x05\x0E\x96" +
-		"\n\x0E\x03\x0E\x03\x0E\x03\x0E\x05\x0E\x9B\n\x0E\x07\x0E\x9D\n\x0E\f\x0E" +
-		"\x0E\x0E\xA0\v\x0E\x03\x0F\x03\x0F\x03\x0F\x05\x0F\xA5\n\x0F\x03\x0F\x03" +
-		"\x0F\x03\x0F\x05\x0F\xAA\n\x0F\x03\x0F\x03\x0F\x03\x0F\x05\x0F\xAF\n\x0F" +
-		"\x07\x0F\xB1\n\x0F\f\x0F\x0E\x0F\xB4\v\x0F\x03\x10\x03\x10\x03\x10\x03" +
-		"\x10\x03\x10\x05\x10\xBB\n\x10\x03\x10\x03\x10\x03\x10\x05\x10\xC0\n\x10" +
-		"\x07\x10\xC2\n\x10\f\x10\x0E\x10\xC5\v\x10\x03\x11\x03\x11\x03\x11\x05" +
-		"\x11\xCA\n\x11\x03\x12\x03\x12\x03\x12\x03\x13\x03\x13\x05\x13\xD1\n\x13" +
-		"\x03\x13\x03\x13\x03\x13\x05\x13\xD6\n\x13\x03\x13\x03\x13\x07\x13\xDA" +
-		"\n\x13\f\x13\x0E\x13\xDD\v\x13\x03\x13\x03\x13\x05\x13\xE1\n\x13\x03\x13" +
-		"\x03\x13\x03\x14\x03\x14\x03\x14\x05\x14\xE8\n\x14\x03\x14\x03\x14\x03" +
-		"\x14\x05\x14\xED\n\x14\x03\x14\x03\x14\x07\x14\xF1\n\x14\f\x14\x0E\x14" +
-		"\xF4\v\x14\x03\x14\x03\x14\x05\x14\xF8\n\x14\x03\x14\x03\x14\x03\x15\x03" +
-		"\x15\x03\x15\x03\x15\x07\x15\u0100\n\x15\f\x15\x0E\x15\u0103\v\x15\x03" +
-		"\x15\x03\x15\x03\x16\x03\x16\x03\x16\x03\x16\x07\x16\u010B\n\x16\f\x16" +
-		"\x0E\x16\u010E\v\x16\x03\x16\x03\x16\x03\x17\x03\x17\x03\x17\x03\x17\x07" +
-		"\x17\u0116\n\x17\f\x17\x0E\x17\u0119\v\x17\x03\x17\x03\x17\x03\x17\rM" +
-		"m{\x9E\xB2\xC3\xDB\xF2\u0101\u010C\u0117\x02\x02\x18\x02\x02\x04\x02\x06" +
-		"\x02\b\x02\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14\x02\x16\x02\x18\x02" +
-		"\x1A\x02\x1C\x02\x1E\x02 \x02\"\x02$\x02&\x02(\x02*\x02,\x02\x02\x02\x02" +
-		"\u012B\x02.\x03\x02\x02\x02\x045\x03\x02\x02\x02\x06<\x03\x02\x02\x02" +
-		"\bE\x03\x02\x02\x02\nI\x03\x02\x02\x02\fS\x03\x02\x02\x02\x0E[\x03\x02" +
-		"\x02\x02\x10d\x03\x02\x02\x02\x12r\x03\x02\x02\x02\x14\x80\x03\x02\x02" +
-		"\x02\x16\x87\x03\x02\x02\x02\x18\x8A\x03\x02\x02\x02\x1A\x8D\x03\x02\x02" +
-		"\x02\x1C\xA1\x03\x02\x02\x02\x1E\xB5\x03\x02\x02\x02 \xC9\x03\x02\x02" +
-		"\x02\"\xCB\x03\x02\x02\x02$\xD0\x03\x02\x02\x02&\xE4\x03\x02\x02\x02(" +
-		"\xFB\x03\x02\x02\x02*\u0106\x03\x02\x02\x02,\u0111\x03\x02\x02\x02./\x05" +
-		"\x04\x03\x02/1\x05\x06\x04\x0202\x05\n\x06\x0210\x03\x02\x02\x0212\x03" +
-		"\x02\x02\x0223\x03\x02\x02\x0234\x05\b\x05\x024\x03\x03\x02\x02\x0259" +
-		"\x07\x03\x02\x0268\x07\x1C\x02\x0276\x03\x02\x02\x028;\x03\x02\x02\x02" +
-		"97\x03\x02\x02\x029:\x03\x02\x02\x02:\x05\x03\x02\x02\x02;9\x03\x02\x02" +
-		"\x02<=\x07\x04\x02\x02=>\x05(\x15\x02>B\x07\x05\x02\x02?A\x07\x1C\x02" +
-		"\x02@?\x03\x02\x02\x02AD\x03\x02\x02\x02B@\x03\x02\x02\x02BC\x03\x02\x02" +
-		"\x02C\x07\x03\x02\x02\x02DB\x03\x02\x02\x02EF\x07\x06\x02\x02FG\x05(\x15" +
-		"\x02GH\x07\x07\x02\x02H\t\x03\x02\x02\x02IM\x05\f\x07\x02JL\x05\f\x07" +
-		"\x02KJ\x03\x02\x02\x02LO\x03\x02\x02\x02MN\x03\x02\x02\x02MK\x03\x02\x02" +
-		"\x02N\v\x03\x02\x02\x02OM\x03\x02\x02\x02PT\x05\x0E\b\x02QT\x05\x10\t" +
-		"\x02RT\x05\x12\n\x02SP\x03\x02\x02\x02SQ\x03\x02\x02\x02SR\x03\x02\x02" +
-		"\x02TX\x03\x02\x02\x02UW\x07\x1C\x02\x02VU\x03\x02\x02\x02WZ\x03\x02\x02" +
-		"\x02XV\x03\x02\x02\x02XY\x03\x02\x02\x02Y\r\x03\x02\x02\x02ZX\x03\x02" +
-		"\x02\x02[\\\x07\x06\x02\x02\\]\x05 \x11\x02]`\x07\b\x02\x02^a\x05\x14" +
-		"\v\x02_a\x05\x16\f\x02`^\x03\x02\x02\x02`_\x03\x02\x02\x02ab\x03\x02\x02" +
-		"\x02bc\x07\x05\x02\x02c\x0F\x03\x02\x02\x02de\x05*\x16\x02ef\x07\t\x02" +
-		"\x02fg\x05(\x15\x02gh\x07\n\x02\x02hm\x05(\x15\x02ij\x07\n\x02\x02jl\x05" +
-		"(\x15\x02ki\x03\x02\x02\x02lo\x03\x02\x02\x02mn\x03\x02\x02\x02mk\x03" +
-		"\x02\x02\x02np\x03\x02\x02\x02om\x03\x02\x02\x02pq\x07\x05\x02\x02q\x11" +
-		"\x03\x02\x02\x02rs\x05,\x17\x02st\x07\t\x02\x02tu\x05(\x15\x02uv\x07\v" +
-		"\x02\x02v{\x05(\x15\x02wx\x07\v\x02\x02xz\x05(\x15\x02yw\x03\x02\x02\x02" +
-		"z}\x03\x02\x02\x02{|\x03\x02\x02\x02{y\x03\x02\x02\x02|~\x03\x02\x02\x02" +
-		"}{\x03\x02\x02\x02~\x7F\x07\x05\x02\x02\x7F\x13\x03\x02\x02\x02\x80\x85" +
-		"\x07\f\x02\x02\x81\x86\x05\x18\r\x02\x82\x86\x05\x1A\x0E\x02\x83\x86\x05" +
-		"\x1C\x0F\x02\x84\x86\x05\x1E\x10\x02\x85\x81\x03\x02\x02\x02\x85\x82\x03" +
-		"\x02\x02\x02\x85\x83\x03\x02\x02\x02\x85\x84\x03\x02\x02\x02\x86\x15\x03" +
-		"\x02\x02\x02\x87\x88\x07\r\x02\x02\x88\x89\x05\x18\r\x02\x89\x17\x03\x02" +
-		"\x02\x02\x8A\x8B\x07\x0E\x02\x02\x8B\x8C\x05(\x15\x02\x8C\x19\x03\x02" +
-		"\x02\x02\x8D\x90\x07\x0E\x02\x02\x8E\x91\x05(\x15\x02\x8F\x91\x05,\x17" +
-		"\x02\x90\x8E\x03\x02\x02\x02\x90\x8F\x03\x02\x02\x02\x91\x92\x03\x02\x02" +
-		"\x02\x92\x95\x07\x0F\x02\x02\x93\x96\x05(\x15\x02\x94\x96\x05,\x17\x02" +
-		"\x95\x93\x03\x02\x02\x02\x95\x94\x03\x02\x02\x02\x96\x9E\x03\x02\x02\x02" +
-		"\x97\x9A\x07\x0F\x02\x02\x98\x9B\x05(\x15\x02\x99\x9B\x05,\x17\x02\x9A" +
-		"\x98\x03\x02\x02\x02\x9A\x99\x03\x02\x02\x02\x9B\x9D\x03\x02\x02\x02\x9C" +
-		"\x97\x03\x02\x02\x02\x9D\xA0\x03\x02\x02\x02\x9E\x9F\x03\x02\x02\x02\x9E" +
-		"\x9C\x03\x02\x02\x02\x9F\x1B\x03\x02\x02\x02\xA0\x9E\x03\x02\x02\x02\xA1" +
-		"\xA4\x07\x10\x02\x02\xA2\xA5\x05(\x15\x02\xA3\xA5\x05*\x16\x02\xA4\xA2" +
-		"\x03\x02\x02\x02\xA4\xA3\x03\x02\x02\x02\xA5\xA6\x03\x02\x02\x02\xA6\xA9" +
-		"\x07\x11\x02\x02\xA7\xAA\x05(\x15\x02\xA8\xAA\x05*\x16\x02\xA9\xA7\x03" +
-		"\x02\x02\x02\xA9\xA8\x03\x02\x02\x02\xAA\xB2\x03\x02\x02\x02\xAB\xAE\x07" +
-		"\x11\x02\x02\xAC\xAF\x05(\x15\x02\xAD\xAF\x05*\x16\x02\xAE\xAC\x03\x02" +
-		"\x02\x02\xAE\xAD\x03\x02\x02\x02\xAF\xB1\x03\x02\x02\x02\xB0\xAB\x03\x02" +
-		"\x02\x02\xB1\xB4\x03\x02\x02\x02\xB2\xB3\x03\x02\x02\x02\xB2\xB0\x03\x02" +
-		"\x02\x02\xB3\x1D\x03\x02\x02\x02\xB4\xB2\x03\x02\x02\x02\xB5\xB6\x07\x12" +
-		"\x02\x02\xB6\xB7\x05(\x15\x02\xB7\xBA\x07\x11\x02\x02\xB8\xBB\x05(\x15" +
-		"\x02\xB9\xBB\x05*\x16\x02\xBA\xB8\x03\x02\x02\x02\xBA\xB9\x03\x02\x02" +
-		"\x02\xBB\xC3\x03\x02\x02\x02\xBC\xBF\x07\x11\x02\x02\xBD\xC0\x05(\x15" +
-		"\x02\xBE\xC0\x05*\x16\x02\xBF\xBD\x03\x02\x02\x02\xBF\xBE\x03\x02\x02" +
-		"\x02\xC0\xC2\x03\x02\x02\x02\xC1\xBC\x03\x02\x02\x02\xC2\xC5\x03\x02\x02" +
-		"\x02\xC3\xC4\x03\x02\x02\x02\xC3\xC1\x03\x02\x02\x02\xC4\x1F\x03\x02\x02" +
-		"\x02\xC5\xC3\x03\x02\x02\x02\xC6\xCA\x05\"\x12\x02\xC7\xCA\x05$\x13\x02" +
-		"\xC8\xCA\x05&\x14\x02\xC9\xC6\x03\x02\x02\x02\xC9\xC7\x03\x02\x02\x02" +
-		"\xC9\xC8\x03\x02\x02\x02\xCA!\x03\x02\x02\x02\xCB\xCC\x05(\x15\x02\xCC" +
-		"\xCD\x07\x13\x02\x02\xCD#\x03\x02\x02\x02\xCE\xD1\x05(\x15\x02\xCF\xD1" +
-		"\x05,\x17\x02\xD0\xCE\x03\x02\x02\x02\xD0\xCF\x03\x02\x02\x02\xD1\xD2" +
-		"\x03\x02\x02\x02\xD2\xDB\x07\x14\x02\x02\xD3\xD6\x05(\x15\x02\xD4\xD6" +
-		"\x05,\x17\x02\xD5\xD3\x03\x02\x02\x02\xD5\xD4\x03\x02\x02\x02\xD6\xD7" +
-		"\x03\x02\x02\x02\xD7\xD8\x07\x14\x02\x02\xD8\xDA\x03\x02\x02\x02\xD9\xD5" +
-		"\x03\x02\x02\x02\xDA\xDD\x03\x02\x02\x02\xDB\xDC\x03\x02\x02\x02\xDB\xD9" +
-		"\x03\x02\x02\x02\xDC\xE0\x03\x02\x02\x02\xDD\xDB\x03\x02\x02\x02\xDE\xE1" +
-		"\x05(\x15\x02\xDF\xE1\x05,\x17\x02\xE0\xDE\x03\x02\x02\x02\xE0\xDF\x03" +
-		"\x02\x02\x02\xE1\xE2\x03\x02\x02\x02\xE2\xE3\x07\x13\x02\x02\xE3%\x03" +
-		"\x02\x02\x02\xE4\xE7\x07\x15\x02\x02\xE5\xE8\x05(\x15\x02\xE6\xE8\x05" +
-		"*\x16\x02\xE7\xE5\x03\x02\x02\x02\xE7\xE6\x03\x02\x02\x02\xE8\xE9\x03" +
-		"\x02\x02\x02\xE9\xF2\x07\x16\x02\x02\xEA\xED\x05(\x15\x02\xEB\xED\x05" +
-		"*\x16\x02\xEC\xEA\x03\x02\x02\x02\xEC\xEB\x03\x02\x02\x02\xED\xEE\x03" +
-		"\x02\x02\x02\xEE\xEF\x07\x16\x02\x02\xEF\xF1\x03\x02\x02\x02\xF0\xEC\x03" +
-		"\x02\x02\x02\xF1\xF4\x03\x02\x02\x02\xF2\xF3\x03\x02\x02\x02\xF2\xF0\x03" +
-		"\x02\x02\x02\xF3\xF7\x03\x02\x02\x02\xF4\xF2\x03\x02\x02\x02\xF5\xF8\x05" +
-		"(\x15\x02\xF6\xF8\x05*\x16\x02\xF7\xF5\x03\x02\x02\x02\xF7\xF6\x03\x02" +
-		"\x02\x02\xF8\xF9\x03\x02\x02\x02\xF9\xFA\x07\x13\x02\x02\xFA\'\x03\x02" +
-		"\x02\x02\xFB\xFC\x07\x17\x02\x02\xFC\u0101\x07\x1A\x02\x02\xFD\xFE\x07" +
-		"\x1B\x02\x02\xFE\u0100\x07\x1A\x02\x02\xFF\xFD\x03\x02\x02\x02\u0100\u0103" +
-		"\x03\x02\x02\x02\u0101\u0102\x03\x02\x02\x02\u0101\xFF\x03\x02\x02\x02" +
-		"\u0102\u0104\x03\x02\x02\x02\u0103\u0101\x03\x02\x02\x02\u0104\u0105\x07" +
-		"\x17\x02\x02\u0105)\x03\x02\x02\x02\u0106\u0107\x07\x18\x02\x02\u0107" +
-		"\u010C\x07\x1A\x02\x02\u0108\u0109\x07\x1B\x02\x02\u0109\u010B\x07\x1A" +
-		"\x02\x02\u010A\u0108\x03\x02\x02\x02\u010B\u010E\x03\x02\x02\x02\u010C" +
-		"\u010D\x03\x02\x02\x02\u010C\u010A\x03\x02\x02\x02\u010D\u010F\x03\x02" +
-		"\x02\x02\u010E\u010C\x03\x02\x02\x02\u010F\u0110\x07\x19\x02\x02\u0110" +
-		"+\x03\x02\x02\x02\u0111\u0112\x07\x18\x02\x02\u0112\u0117\x07\x1A\x02" +
-		"\x02\u0113\u0114\x07\x1B\x02\x02\u0114\u0116\x07\x1A\x02\x02\u0115\u0113" +
-		"\x03\x02\x02\x02\u0116\u0119\x03\x02\x02\x02\u0117\u0118\x03\x02\x02\x02" +
-		"\u0117\u0115\x03\x02\x02\x02\u0118\u011A\x03\x02\x02\x02\u0119\u0117\x03" +
-		"\x02\x02\x02\u011A\u011B\x07\x19\x02\x02\u011B-\x03\x02\x02\x02#19BMS" +
-		"X`m{\x85\x90\x95\x9A\x9E\xA4\xA9\xAE\xB2\xBA\xBF\xC3\xC9\xD0\xD5\xDB\xE0" +
-		"\xE7\xEC\xF2\xF7\u0101\u010C\u0117";
+		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x03\x03\x03\x07\x035\n\x03\f\x03" +
+		"\x0E\x038\v\x03\x03\x04\x03\x04\x03\x04\x03\x04\x07\x04>\n\x04\f\x04\x0E" +
+		"\x04A\v\x04\x03\x05\x03\x05\x07\x05E\n\x05\f\x05\x0E\x05H\v\x05\x03\x06" +
+		"\x03\x06\x03\x06\x03\x06\x05\x06N\n\x06\x03\x06\x07\x06Q\n\x06\f\x06\x0E" +
+		"\x06T\v\x06\x03\x07\x03\x07\x03\x07\x03\x07\x03\b\x03\b\x03\b\x03\b\x03" +
+		"\b\x05\b_\n\b\x03\b\x03\b\x03\t\x03\t\x03\t\x03\t\x03\t\x03\t\x03\t\x07" +
+		"\tj\n\t\f\t\x0E\tm\v\t\x03\t\x03\t\x03\n\x03\n\x03\n\x03\n\x03\n\x03\n" +
+		"\x03\n\x07\nx\n\n\f\n\x0E\n{\v\n\x03\n\x03\n\x03\v\x03\v\x03\v\x03\v\x03" +
+		"\v\x05\v\x84\n\v\x03\f\x03\f\x03\f\x03\r\x03\r\x03\r\x03\x0E\x03\x0E\x03" +
+		"\x0E\x05\x0E\x8F\n\x0E\x03\x0E\x03\x0E\x03\x0E\x05\x0E\x94\n\x0E\x03\x0E" +
+		"\x03\x0E\x03\x0E\x05\x0E\x99\n\x0E\x07\x0E\x9B\n\x0E\f\x0E\x0E\x0E\x9E" +
+		"\v\x0E\x03\x0F\x03\x0F\x03\x0F\x05\x0F\xA3\n\x0F\x03\x0F\x03\x0F\x03\x0F" +
+		"\x05\x0F\xA8\n\x0F\x03\x0F\x03\x0F\x03\x0F\x05\x0F\xAD\n\x0F\x07\x0F\xAF" +
+		"\n\x0F\f\x0F\x0E\x0F\xB2\v\x0F\x03\x10\x03\x10\x03\x10\x03\x10\x03\x10" +
+		"\x05\x10\xB9\n\x10\x03\x10\x03\x10\x03\x10\x05\x10\xBE\n\x10\x07\x10\xC0" +
+		"\n\x10\f\x10\x0E\x10\xC3\v\x10\x03\x11\x03\x11\x03\x11\x05\x11\xC8\n\x11" +
+		"\x03\x12\x03\x12\x03\x12\x03\x13\x03\x13\x05\x13\xCF\n\x13\x03\x13\x03" +
+		"\x13\x03\x13\x05\x13\xD4\n\x13\x03\x13\x03\x13\x07\x13\xD8\n\x13\f\x13" +
+		"\x0E\x13\xDB\v\x13\x03\x13\x03\x13\x05\x13\xDF\n\x13\x03\x13\x03\x13\x03" +
+		"\x14\x03\x14\x03\x14\x05\x14\xE6\n\x14\x03\x14\x03\x14\x03\x14\x05\x14" +
+		"\xEB\n\x14\x03\x14\x03\x14\x07\x14\xEF\n\x14\f\x14\x0E\x14\xF2\v\x14\x03" +
+		"\x14\x03\x14\x05\x14\xF6\n\x14\x03\x14\x03\x14\x03\x15\x03\x15\x03\x15" +
+		"\x03\x15\x07\x15\xFE\n\x15\f\x15\x0E\x15\u0101\v\x15\x03\x15\x03\x15\x03" +
+		"\x16\x03\x16\x03\x16\x03\x16\x07\x16\u0109\n\x16\f\x16\x0E\x16\u010C\v" +
+		"\x16\x03\x16\x03\x16\x03\x17\x03\x17\x03\x17\x03\x17\x07\x17\u0114\n\x17" +
+		"\f\x17\x0E\x17\u0117\v\x17\x03\x17\x03\x17\x03\x17\rFky\x9C\xB0\xC1\xD9" +
+		"\xF0\xFF\u010A\u0115\x02\x02\x18\x02\x02\x04\x02\x06\x02\b\x02\n\x02\f" +
+		"\x02\x0E\x02\x10\x02\x12\x02\x14\x02\x16\x02\x18\x02\x1A\x02\x1C\x02\x1E" +
+		"\x02 \x02\"\x02$\x02&\x02(\x02*\x02,\x02\x02\x02\x02\u0129\x02.\x03\x02" +
+		"\x02\x02\x042\x03\x02\x02\x02\x069\x03\x02\x02\x02\bB\x03\x02\x02\x02" +
+		"\nM\x03\x02\x02\x02\fU\x03\x02\x02\x02\x0EY\x03\x02\x02\x02\x10b\x03\x02" +
+		"\x02\x02\x12p\x03\x02\x02\x02\x14~\x03\x02\x02\x02\x16\x85\x03\x02\x02" +
+		"\x02\x18\x88\x03\x02\x02\x02\x1A\x8B\x03\x02\x02\x02\x1C\x9F\x03\x02\x02" +
+		"\x02\x1E\xB3\x03\x02\x02\x02 \xC7\x03\x02\x02\x02\"\xC9\x03\x02\x02\x02" +
+		"$\xCE\x03\x02\x02\x02&\xE2\x03\x02\x02\x02(\xF9\x03\x02\x02\x02*\u0104" +
+		"\x03\x02\x02\x02,\u010F\x03\x02\x02\x02./\x05\x04\x03\x02/0\x05\x06\x04" +
+		"\x0201\x05\b\x05\x021\x03\x03\x02\x02\x0226\x07\x03\x02\x0235\x07\x1C" +
+		"\x02\x0243\x03\x02\x02\x0258\x03\x02\x02\x0264\x03\x02\x02\x0267\x03\x02" +
+		"\x02\x027\x05\x03\x02\x02\x0286\x03\x02\x02\x029:\x07\x04\x02\x02:;\x05" +
+		"(\x15\x02;?\x07\x05\x02\x02<>\x07\x1C\x02\x02=<\x03\x02\x02\x02>A\x03" +
+		"\x02\x02\x02?=\x03\x02\x02\x02?@\x03\x02\x02\x02@\x07\x03\x02\x02\x02" +
+		"A?\x03\x02\x02\x02BF\x05\n\x06\x02CE\x05\n\x06\x02DC\x03\x02\x02\x02E" +
+		"H\x03\x02\x02\x02FG\x03\x02\x02\x02FD\x03\x02\x02\x02G\t\x03\x02\x02\x02" +
+		"HF\x03\x02\x02\x02IN\x05\x0E\b\x02JN\x05\f\x07\x02KN\x05\x10\t\x02LN\x05" +
+		"\x12\n\x02MI\x03\x02\x02\x02MJ\x03\x02\x02\x02MK\x03\x02\x02\x02ML\x03" +
+		"\x02\x02\x02NR\x03\x02\x02\x02OQ\x07\x1C\x02\x02PO\x03\x02\x02\x02QT\x03" +
+		"\x02\x02\x02RP\x03\x02\x02\x02RS\x03\x02\x02\x02S\v\x03\x02\x02\x02TR" +
+		"\x03\x02\x02\x02UV\x07\x06\x02\x02VW\x05 \x11\x02WX\x07\x07\x02\x02X\r" +
+		"\x03\x02\x02\x02YZ\x07\x06\x02\x02Z[\x05 \x11\x02[^\x07\b\x02\x02\\_\x05" +
+		"\x14\v\x02]_\x05\x16\f\x02^\\\x03\x02\x02\x02^]\x03\x02\x02\x02_`\x03" +
+		"\x02\x02\x02`a\x07\x05\x02\x02a\x0F\x03\x02\x02\x02bc\x05*\x16\x02cd\x07" +
+		"\t\x02\x02de\x05(\x15\x02ef\x07\n\x02\x02fk\x05(\x15\x02gh\x07\n\x02\x02" +
+		"hj\x05(\x15\x02ig\x03\x02\x02\x02jm\x03\x02\x02\x02kl\x03\x02\x02\x02" +
+		"ki\x03\x02\x02\x02ln\x03\x02\x02\x02mk\x03\x02\x02\x02no\x07\x05\x02\x02" +
+		"o\x11\x03\x02\x02\x02pq\x05,\x17\x02qr\x07\t\x02\x02rs\x05(\x15\x02st" +
+		"\x07\v\x02\x02ty\x05(\x15\x02uv\x07\v\x02\x02vx\x05(\x15\x02wu\x03\x02" +
+		"\x02\x02x{\x03\x02\x02\x02yz\x03\x02\x02\x02yw\x03\x02\x02\x02z|\x03\x02" +
+		"\x02\x02{y\x03\x02\x02\x02|}\x07\x05\x02\x02}\x13\x03\x02\x02\x02~\x83" +
+		"\x07\f\x02\x02\x7F\x84\x05\x18\r\x02\x80\x84\x05\x1A\x0E\x02\x81\x84\x05" +
+		"\x1C\x0F\x02\x82\x84\x05\x1E\x10\x02\x83\x7F\x03\x02\x02\x02\x83\x80\x03" +
+		"\x02\x02\x02\x83\x81\x03\x02\x02\x02\x83\x82\x03\x02\x02\x02\x84\x15\x03" +
+		"\x02\x02\x02\x85\x86\x07\r\x02\x02\x86\x87\x05\x18\r\x02\x87\x17\x03\x02" +
+		"\x02\x02\x88\x89\x07\x0E\x02\x02\x89\x8A\x05(\x15\x02\x8A\x19\x03\x02" +
+		"\x02\x02\x8B\x8E\x07\x0E\x02\x02\x8C\x8F\x05(\x15\x02\x8D\x8F\x05,\x17" +
+		"\x02\x8E\x8C\x03\x02\x02\x02\x8E\x8D\x03\x02\x02\x02\x8F\x90\x03\x02\x02" +
+		"\x02\x90\x93\x07\x0F\x02\x02\x91\x94\x05(\x15\x02\x92\x94\x05,\x17\x02" +
+		"\x93\x91\x03\x02\x02\x02\x93\x92\x03\x02\x02\x02\x94\x9C\x03\x02\x02\x02" +
+		"\x95\x98\x07\x0F\x02\x02\x96\x99\x05(\x15\x02\x97\x99\x05,\x17\x02\x98" +
+		"\x96\x03\x02\x02\x02\x98\x97\x03\x02\x02\x02\x99\x9B\x03\x02\x02\x02\x9A" +
+		"\x95\x03\x02\x02\x02\x9B\x9E\x03\x02\x02\x02\x9C\x9D\x03\x02\x02\x02\x9C" +
+		"\x9A\x03\x02\x02\x02\x9D\x1B\x03\x02\x02\x02\x9E\x9C\x03\x02\x02\x02\x9F" +
+		"\xA2\x07\x10\x02\x02\xA0\xA3\x05(\x15\x02\xA1\xA3\x05*\x16\x02\xA2\xA0" +
+		"\x03\x02\x02\x02\xA2\xA1\x03\x02\x02\x02\xA3\xA4\x03\x02\x02\x02\xA4\xA7" +
+		"\x07\x11\x02\x02\xA5\xA8\x05(\x15\x02\xA6\xA8\x05*\x16\x02\xA7\xA5\x03" +
+		"\x02\x02\x02\xA7\xA6\x03\x02\x02\x02\xA8\xB0\x03\x02\x02\x02\xA9\xAC\x07" +
+		"\x11\x02\x02\xAA\xAD\x05(\x15\x02\xAB\xAD\x05*\x16\x02\xAC\xAA\x03\x02" +
+		"\x02\x02\xAC\xAB\x03\x02\x02\x02\xAD\xAF\x03\x02\x02\x02\xAE\xA9\x03\x02" +
+		"\x02\x02\xAF\xB2\x03\x02\x02\x02\xB0\xB1\x03\x02\x02\x02\xB0\xAE\x03\x02" +
+		"\x02\x02\xB1\x1D\x03\x02\x02\x02\xB2\xB0\x03\x02\x02\x02\xB3\xB4\x07\x12" +
+		"\x02\x02\xB4\xB5\x05(\x15\x02\xB5\xB8\x07\x11\x02\x02\xB6\xB9\x05(\x15" +
+		"\x02\xB7\xB9\x05*\x16\x02\xB8\xB6\x03\x02\x02\x02\xB8\xB7\x03\x02\x02" +
+		"\x02\xB9\xC1\x03\x02\x02\x02\xBA\xBD\x07\x11\x02\x02\xBB\xBE\x05(\x15" +
+		"\x02\xBC\xBE\x05*\x16\x02\xBD\xBB\x03\x02\x02\x02\xBD\xBC\x03\x02\x02" +
+		"\x02\xBE\xC0\x03\x02\x02\x02\xBF\xBA\x03\x02\x02\x02\xC0\xC3\x03\x02\x02" +
+		"\x02\xC1\xC2\x03\x02\x02\x02\xC1\xBF\x03\x02\x02\x02\xC2\x1F\x03\x02\x02" +
+		"\x02\xC3\xC1\x03\x02\x02\x02\xC4\xC8\x05\"\x12\x02\xC5\xC8\x05$\x13\x02" +
+		"\xC6\xC8\x05&\x14\x02\xC7\xC4\x03\x02\x02\x02\xC7\xC5\x03\x02\x02\x02" +
+		"\xC7\xC6\x03\x02\x02\x02\xC8!\x03\x02\x02\x02\xC9\xCA\x05(\x15\x02\xCA" +
+		"\xCB\x07\x13\x02\x02\xCB#\x03\x02\x02\x02\xCC\xCF\x05(\x15\x02\xCD\xCF" +
+		"\x05,\x17\x02\xCE\xCC\x03\x02\x02\x02\xCE\xCD\x03\x02\x02\x02\xCF\xD0" +
+		"\x03\x02\x02\x02\xD0\xD9\x07\x14\x02\x02\xD1\xD4\x05(\x15\x02\xD2\xD4" +
+		"\x05,\x17\x02\xD3\xD1\x03\x02\x02\x02\xD3\xD2\x03\x02\x02\x02\xD4\xD5" +
+		"\x03\x02\x02\x02\xD5\xD6\x07\x14\x02\x02\xD6\xD8\x03\x02\x02\x02\xD7\xD3" +
+		"\x03\x02\x02\x02\xD8\xDB\x03\x02\x02\x02\xD9\xDA\x03\x02\x02\x02\xD9\xD7" +
+		"\x03\x02\x02\x02\xDA\xDE\x03\x02\x02\x02\xDB\xD9\x03\x02\x02\x02\xDC\xDF" +
+		"\x05(\x15\x02\xDD\xDF\x05,\x17\x02\xDE\xDC\x03\x02\x02\x02\xDE\xDD\x03" +
+		"\x02\x02\x02\xDF\xE0\x03\x02\x02\x02\xE0\xE1\x07\x13\x02\x02\xE1%\x03" +
+		"\x02\x02\x02\xE2\xE5\x07\x15\x02\x02\xE3\xE6\x05(\x15\x02\xE4\xE6\x05" +
+		"*\x16\x02\xE5\xE3\x03\x02\x02\x02\xE5\xE4\x03\x02\x02\x02\xE6\xE7\x03" +
+		"\x02\x02\x02\xE7\xF0\x07\x16\x02\x02\xE8\xEB\x05(\x15\x02\xE9\xEB\x05" +
+		"*\x16\x02\xEA\xE8\x03\x02\x02\x02\xEA\xE9\x03\x02\x02\x02\xEB\xEC\x03" +
+		"\x02\x02\x02\xEC\xED\x07\x16\x02\x02\xED\xEF\x03\x02\x02\x02\xEE\xEA\x03" +
+		"\x02\x02\x02\xEF\xF2\x03\x02\x02\x02\xF0\xF1\x03\x02\x02\x02\xF0\xEE\x03" +
+		"\x02\x02\x02\xF1\xF5\x03\x02\x02\x02\xF2\xF0\x03\x02\x02\x02\xF3\xF6\x05" +
+		"(\x15\x02\xF4\xF6\x05*\x16\x02\xF5\xF3\x03\x02\x02\x02\xF5\xF4\x03\x02" +
+		"\x02\x02\xF6\xF7\x03\x02\x02\x02\xF7\xF8\x07\x13\x02\x02\xF8\'\x03\x02" +
+		"\x02\x02\xF9\xFA\x07\x17\x02\x02\xFA\xFF\x07\x1A\x02\x02\xFB\xFC\x07\x1B" +
+		"\x02\x02\xFC\xFE\x07\x1A\x02\x02\xFD\xFB\x03\x02\x02\x02\xFE\u0101\x03" +
+		"\x02\x02\x02\xFF\u0100\x03\x02\x02\x02\xFF\xFD\x03\x02\x02\x02\u0100\u0102" +
+		"\x03\x02\x02\x02\u0101\xFF\x03\x02\x02\x02\u0102\u0103\x07\x17\x02\x02" +
+		"\u0103)\x03\x02\x02\x02\u0104\u0105\x07\x18\x02\x02\u0105\u010A\x07\x1A" +
+		"\x02\x02\u0106\u0107\x07\x1B\x02\x02\u0107\u0109\x07\x1A\x02\x02\u0108" +
+		"\u0106\x03\x02\x02\x02\u0109\u010C\x03\x02\x02\x02\u010A\u010B\x03\x02" +
+		"\x02\x02\u010A\u0108\x03\x02\x02\x02\u010B\u010D\x03\x02\x02\x02\u010C" +
+		"\u010A\x03\x02\x02\x02\u010D\u010E\x07\x19\x02\x02\u010E+\x03\x02\x02" +
+		"\x02\u010F\u0110\x07\x18\x02\x02\u0110\u0115\x07\x1A\x02\x02\u0111\u0112" +
+		"\x07\x1B\x02\x02\u0112\u0114\x07\x1A\x02\x02\u0113\u0111\x03\x02\x02\x02" +
+		"\u0114\u0117\x03\x02\x02\x02\u0115\u0116\x03\x02\x02\x02\u0115\u0113\x03" +
+		"\x02\x02\x02\u0116\u0118\x03\x02\x02\x02\u0117\u0115\x03\x02\x02\x02\u0118" +
+		"\u0119\x07\x19\x02\x02\u0119-\x03\x02\x02\x02\"6?FMR^ky\x83\x8E\x93\x98" +
+		"\x9C\xA2\xA7\xAC\xB0\xB8\xBD\xC1\xC7\xCE\xD3\xD9\xDE\xE5\xEA\xF0\xF5\xFF" +
+		"\u010A\u0115";
 	public static __ATN: ATN;
 	public static get _ATN(): ATN {
 		if (!MScGrammarParser.__ATN) {
@@ -1489,11 +1485,8 @@ export class DescriptionContext extends ParserRuleContext {
 	public initialStatement(): InitialStatementContext {
 		return this.getRuleContext(0, InitialStatementContext);
 	}
-	public closingStatement(): ClosingStatementContext {
-		return this.getRuleContext(0, ClosingStatementContext);
-	}
-	public statementList(): StatementListContext | undefined {
-		return this.tryGetRuleContext(0, StatementListContext);
+	public statementList(): StatementListContext {
+		return this.getRuleContext(0, StatementListContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -1578,30 +1571,6 @@ export class InitialStatementContext extends ParserRuleContext {
 }
 
 
-export class ClosingStatementContext extends ParserRuleContext {
-	public activity(): ActivityContext {
-		return this.getRuleContext(0, ActivityContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return MScGrammarParser.RULE_closingStatement; }
-	// @Override
-	public enterRule(listener: MScGrammarListener): void {
-		if (listener.enterClosingStatement) {
-			listener.enterClosingStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: MScGrammarListener): void {
-		if (listener.exitClosingStatement) {
-			listener.exitClosingStatement(this);
-		}
-	}
-}
-
-
 export class StatementListContext extends ParserRuleContext {
 	public statement(): StatementContext[];
 	public statement(i: number): StatementContext;
@@ -1636,6 +1605,9 @@ export class StatementContext extends ParserRuleContext {
 	public afterStatement(): AfterStatementContext | undefined {
 		return this.tryGetRuleContext(0, AfterStatementContext);
 	}
+	public closingStatement(): ClosingStatementContext | undefined {
+		return this.tryGetRuleContext(0, ClosingStatementContext);
+	}
 	public asp(): AspContext | undefined {
 		return this.tryGetRuleContext(0, AspContext);
 	}
@@ -1666,6 +1638,30 @@ export class StatementContext extends ParserRuleContext {
 	public exitRule(listener: MScGrammarListener): void {
 		if (listener.exitStatement) {
 			listener.exitStatement(this);
+		}
+	}
+}
+
+
+export class ClosingStatementContext extends ParserRuleContext {
+	public postActivityExpression(): PostActivityExpressionContext {
+		return this.getRuleContext(0, PostActivityExpressionContext);
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return MScGrammarParser.RULE_closingStatement; }
+	// @Override
+	public enterRule(listener: MScGrammarListener): void {
+		if (listener.enterClosingStatement) {
+			listener.enterClosingStatement(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: MScGrammarListener): void {
+		if (listener.exitClosingStatement) {
+			listener.exitClosingStatement(this);
 		}
 	}
 }

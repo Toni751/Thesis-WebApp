@@ -46,8 +46,21 @@ export class ContextListener implements MScGrammarListener {
     this.currentStatement = new StatementMetadata(0); // redundant initialization
   }
 
+  public enterClosingStatement(ctx: ClosingStatementContext): void {
+    this.currentStatement.setStatementType(StatementType.CLOSING);
+  }
+
   public exitClosingStatement(ctx: ClosingStatementContext): void {
-    this.sentenceParser.handleClosingStatement(ctx.activity().WORD());
+    this.sentenceParser.setStatementMetadata(this.currentStatement);
+    if (this.currentStatement.getPostActivityType() == PostActivityType.SEQUENCE) {
+      this.sentenceParser.handleClosingStatementSequence();
+    } else if (this.currentStatement.getPostActivityType() == PostActivityType.AND) {
+      this.sentenceParser.handleClosingStatementAnd();
+    } else if (this.currentStatement.getPostActivityType() == PostActivityType.OR) {
+      this.sentenceParser.handleClosingStatementOr();
+    } else {
+      throw new Error("Cannot handle " + this.currentStatement.getPostActivityType());
+    }
   }
 
   public enterAndPostActivityExpression(ctx: AndPostActivityExpressionContext): void {
