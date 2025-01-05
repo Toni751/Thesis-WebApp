@@ -133,7 +133,6 @@ export default function Home() {
 
     // Return the final DOT representation as a string
     const out = dotOutput.join("\n");
-    // console.log(out);
     return out;
   };
 
