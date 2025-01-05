@@ -38,6 +38,7 @@ export default function Home() {
     }
     if (!conversions[1][0].startsWith(ERROR_MESSAGE)) {
       const container = document.getElementById("declareContainer");
+      // we need to clear the container before rendering the new Declare model
       if (container) {
         container.innerHTML = "";
       }
