@@ -1,4 +1,5 @@
 import { Editor } from "./editor/editor.js";
+import { Menu } from "./interactivity/menu.js";
 import { ExistenceConstraintSubmenu } from "./interactivity/subMenu.js";
 import { RelationConstraintSubmenu } from "./interactivity/subMenu.js";
 
@@ -10,6 +11,7 @@ import { determineForces } from "./graphLayout.js";
 import { DeclareModel } from "./declareModel.js";
 
 import { handleFileUpload } from "./interactivity/importMenu.js";
+import { switchMode } from "./interactivity/actions/switchMode.js";
 
 export class DeclareContainer {
   constructor(str) {
@@ -91,15 +93,12 @@ export class DeclareContainer {
     this.editor = new Editor(this);
     this.declareModel = new DeclareModel(this);
 
-    this.existenceConstraintSubmenu = new ExistenceConstraintSubmenu(this);
-    this.relationConstraintSubmenu = new RelationConstraintSubmenu(this);
-
-    // this.helpMenu = new Menu(this, ["HELP"], null, "htr");
-    // this.exportMenu = new ExpansionMenu(this, "120px", ["JSON_EXPORT", "SVG_EXPORT", "TXT_EXPORT"]);
-    // this.ioMenu = new Menu(this, ["NEW", "IMPORT", "EXPORT"], null, "hbl");
-    // this.navigationMenu = new Menu(this, ["ZOOM_IN", "ZOOM_OUT"], null, "vbr");
+    this.editMenu = new Menu(this, ["MOVE"], null, "vtl");
 
     let container = this;
+
+    this.mode = "MOVE";
+    this.editMenu.setActive("MOVE");
 
     // Add file input
     this.fileInput = document.createElement("input");
@@ -130,5 +129,8 @@ export class DeclareContainer {
       this.declareModel.autoLayout = false;
       this.declareModel.alignActivities();
     }, 10000);
+    // Apply selected mode
+    this.enableEdit = !this.enableEdit;
+    switchMode(this);
   }
 }

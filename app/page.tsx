@@ -21,6 +21,7 @@ export default function Home() {
   const [declareRum, setDeclareRum] = useState("");
   const [declareJs, setDeclareJs] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [triggeredTab, setTriggeredTab] = useState(PETRI_NET);
 
   useEffect(() => {
     handleConvert(EXAMPLE_NL_TEXT_CONVERTED);
@@ -185,7 +186,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col w-full h-screen gap-12 p-12">
-      <div className="flex flex-row gap-12 items-center justify-center h-1/2">
+      <div className="flex flex-row gap-12 items-center justify-center h-1/3">
         <div className="flex flex-col w-1/2 h-full gap-2">
           <Label htmlFor="message">Prompt for AI to convert text into dialect and model</Label>
           <Textarea
@@ -218,8 +219,9 @@ export default function Home() {
       </div>
       <Tabs
         defaultValue={PETRI_NET}
-        className="h-1/2"
+        className="h-2/3"
         onValueChange={(v) => {
+          setTriggeredTab(v);
           if (v === PETRI_NET && !petriNet.startsWith(ERROR_MESSAGE)) {
             graphvizToSVG(tpn2graphviz(petriNet));
           }
@@ -230,14 +232,33 @@ export default function Home() {
           }
         }}
       >
-        <TabsList className="w-full">
-          <TabsTrigger value={PETRI_NET} className="w-1/2">
-            Petri Net
-          </TabsTrigger>
-          <TabsTrigger value={DECLARE} className="w-1/2">
-            Declare
-          </TabsTrigger>
-        </TabsList>
+        <div className="flex flex-row justify-between">
+          <TabsList className="w-1/3">
+            <TabsTrigger value={PETRI_NET} className="w-1/2">
+              Petri Net
+            </TabsTrigger>
+            <TabsTrigger value={DECLARE} className="w-1/2">
+              Declare
+            </TabsTrigger>
+          </TabsList>
+          {triggeredTab === PETRI_NET ? (
+            <button
+              className="bg-blue-400 text-white rounded-md p-2 my-2 h-[10%] hover:bg-blue-500 disabled:bg-blue-200"
+              disabled={petriNet.startsWith(ERROR_MESSAGE)}
+              onClick={() => handleDownloadFile(PETRI_NET)}
+            >
+              Download TPN file
+            </button>
+          ) : (
+            <button
+              className="bg-blue-400 text-white rounded-md p-2 my-2 h-[10%] hover:bg-blue-500 disabled:bg-blue-200"
+              disabled={declareRum.startsWith(ERROR_MESSAGE)}
+              onClick={() => handleDownloadFile(DECLARE)}
+            >
+              Download DECL file
+            </button>
+          )}
+        </div>
         <TabsContent value={PETRI_NET} className="pb-6 h-full">
           {petriNet.startsWith(ERROR_MESSAGE) ? (
             <Textarea
@@ -249,13 +270,6 @@ export default function Home() {
           ) : (
             <div id="graph" className="h-[90%] w-full overflow-auto"></div>
           )}
-          <button
-            className="bg-blue-400 text-white rounded-md py-1 mt-2 h-[10%] w-full hover:bg-blue-500 disabled:bg-blue-200"
-            disabled={petriNet.startsWith(ERROR_MESSAGE)}
-            onClick={() => handleDownloadFile(PETRI_NET)}
-          >
-            Download TPN file
-          </button>
         </TabsContent>
         <TabsContent value={DECLARE} className="pb-6 h-full">
           {declareRum.startsWith(ERROR_MESSAGE) ? (
@@ -269,13 +283,6 @@ export default function Home() {
           ) : (
             <div id="declareContainer" className={`h-[90%] w-full overflow-auto`}></div>
           )}
-          <button
-            className="bg-blue-400 text-white rounded-md py-1 mt-2 h-[10%] w-full hover:bg-blue-500 disabled:bg-blue-200"
-            disabled={declareRum.startsWith(ERROR_MESSAGE)}
-            onClick={() => handleDownloadFile(DECLARE)}
-          >
-            Download DECL file
-          </button>
         </TabsContent>
       </Tabs>
       {isLoading && <LoadingSpinner />}

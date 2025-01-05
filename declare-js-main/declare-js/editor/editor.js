@@ -66,8 +66,6 @@ export class Editor {
     this.descriptionContainer.style.padding = "8px 1px 20px 12px";
     this.descriptionContainer.style.fontStyle = "italic";
     this.descriptionContainer.style.whiteSpace = "normal";
-    this.addActivitySelectionEvent(this.activitiesContainer);
-    this.addConstraintSelectionEvent(this.constraintsContainer);
 
     this.addActivity("<br>");
     this.addConstraint("<br>");
@@ -329,24 +327,6 @@ export class Editor {
       // this.declare.helpMenu.menuContainer.style.transition = "right 0.5s";
       // this.declare.navigationMenu.menuContainer.style.transition = "right 0.5s";
       this.menuContainer.style.userSelect = "unset";
-    });
-  }
-
-  addActivitySelectionEvent(container) {
-    container.addEventListener("click", (evt) => {
-      if (container.contentEditable === "false") {
-        let activityId = evt.target.getAttribute("elem_id");
-        editorSelectActivity(evt, activityId, this.declare);
-      }
-    });
-  }
-
-  addConstraintSelectionEvent(container) {
-    container.addEventListener("click", (evt) => {
-      if (container.contentEditable === "false") {
-        let constraintId = evt.target.getAttribute("elem_id");
-        editorSelectConstraint(evt, constraintId, this.declare);
-      }
     });
   }
 
