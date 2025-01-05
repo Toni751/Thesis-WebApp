@@ -279,15 +279,15 @@ export class Editor {
   close() {
     this.menuContainer.style.right = -(this.width + 4) + "px";
     this.collapseButtonIcon.style.transform = "rotate(0)";
-    this.declare.helpMenu.menuContainer.style.right = "20px";
-    this.declare.navigationMenu.menuContainer.style.right = "20px";
+    // this.declare.helpMenu.menuContainer.style.right = "20px";
+    // this.declare.navigationMenu.menuContainer.style.right = "20px";
   }
 
   open() {
     this.menuContainer.style.right = "0";
-    this.declare.helpMenu.menuContainer.style.right = this.width + 24 + "px";
+    // this.declare.helpMenu.menuContainer.style.right = this.width + 24 + "px";
     this.collapseButtonIcon.style.transform = "rotate(180deg)";
-    this.declare.navigationMenu.menuContainer.style.right = this.width + 24 + "px";
+    // this.declare.navigationMenu.menuContainer.style.right = this.width + 24 + "px";
   }
 
   addResizeEvent() {
@@ -316,18 +316,18 @@ export class Editor {
         for (const faceplate of this.faceplates) {
           faceplate.style.width = this.width - 16;
         }
-        this.declare.helpMenu.menuContainer.style.right = this.width + 24 + "px";
-        this.declare.helpMenu.menuContainer.style.transition = "right 0s";
-        this.declare.navigationMenu.menuContainer.style.right = this.width + 24 + "px";
-        this.declare.navigationMenu.menuContainer.style.transition = "right 0s";
+        // this.declare.helpMenu.menuContainer.style.right = this.width + 24 + "px";
+        // this.declare.helpMenu.menuContainer.style.transition = "right 0s";
+        // this.declare.navigationMenu.menuContainer.style.right = this.width + 24 + "px";
+        // this.declare.navigationMenu.menuContainer.style.transition = "right 0s";
         this.menuContainer.style.userSelect = "none";
       }
     });
 
     document.addEventListener("mouseup", (evt) => {
       this.resize = false;
-      this.declare.helpMenu.menuContainer.style.transition = "right 0.5s";
-      this.declare.navigationMenu.menuContainer.style.transition = "right 0.5s";
+      // this.declare.helpMenu.menuContainer.style.transition = "right 0.5s";
+      // this.declare.navigationMenu.menuContainer.style.transition = "right 0.5s";
       this.menuContainer.style.userSelect = "unset";
     });
   }

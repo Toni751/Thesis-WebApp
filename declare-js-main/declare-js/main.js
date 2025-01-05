@@ -1,22 +1,9 @@
-import { gridDefs } from "./svg/defs.js";
-
-import { switchMode } from "./interactivity/actions/switchMode.js";
-
 import { Editor } from "./editor/editor.js";
-import { Menu } from "./interactivity/menu.js";
-import { ExpansionMenu } from "./interactivity/expansionMenu.js";
 import { ExistenceConstraintSubmenu } from "./interactivity/subMenu.js";
 import { RelationConstraintSubmenu } from "./interactivity/subMenu.js";
-import { ContextMenu } from "./interactivity/contextMenu.js";
 
 import { addEventListeners } from "./interactivity/eventListeners.js";
 import { zoom } from "./interactivity/actions/zoom.js";
-import { HelpModal } from "./interactivity/modal.js";
-import * as editMenuInteraction from "./interactivity/editMenu.js";
-import * as ioMenuInteraction from "./interactivity/ioMenu.js";
-import * as exportMenuInteraction from "./interactivity/exportMenu.js";
-import * as navigationMenuInteraction from "./interactivity/navigationMenu.js";
-import * as contextMenuInteraction from "./interactivity/contextMenuActions.js";
 
 import { SvgElement } from "./elements/svgElement.js";
 import { determineForces } from "./graphLayout.js";
@@ -92,70 +79,27 @@ export class DeclareContainer {
     viewRect.setAttribute("height", 10000);
     viewRect.setAttribute("fill", "url(#grid)");
 
+    const gridDefs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+    gridDefs.innerHTML = `
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+        <circle cx="0" cy="0" r="2" fill="#d9d9d9"/>
+    </pattern>
+`;
     this.canvas.appendChild(gridDefs);
 
     // Add text editor and declare model
     this.editor = new Editor(this);
     this.declareModel = new DeclareModel(this);
 
-    // Add edit menu
-    // this.editMenu = new Menu(
-    //   this,
-    //   [
-    //     "MOVE",
-    //     "ACTIVITY_PLACEMENT",
-    //     "EXISTENCE_CONSTRAINT_PLACEMENT",
-    //     "RELATION_CONSTRAINT_PLACEMENT",
-    //     "DELETE",
-    //     "AUTO_LAYOUT",
-    //   ],
-    //   null,
-    //   "vtl"
-    // );
     this.existenceConstraintSubmenu = new ExistenceConstraintSubmenu(this);
     this.relationConstraintSubmenu = new RelationConstraintSubmenu(this);
 
-    this.helpMenu = new Menu(this, ["HELP"], null, "htr");
-    this.exportMenu = new ExpansionMenu(this, "120px", ["JSON_EXPORT", "SVG_EXPORT", "TXT_EXPORT"]);
-    this.ioMenu = new Menu(this, ["NEW", "IMPORT", "EXPORT"], null, "hbl");
-    this.navigationMenu = new Menu(this, ["ZOOM_IN", "ZOOM_OUT"], null, "vbr");
+    // this.helpMenu = new Menu(this, ["HELP"], null, "htr");
+    // this.exportMenu = new ExpansionMenu(this, "120px", ["JSON_EXPORT", "SVG_EXPORT", "TXT_EXPORT"]);
+    // this.ioMenu = new Menu(this, ["NEW", "IMPORT", "EXPORT"], null, "hbl");
+    // this.navigationMenu = new Menu(this, ["ZOOM_IN", "ZOOM_OUT"], null, "vbr");
 
-    var container = this;
-    // this.helpMenu.menuContainer.addEventListener("click", (evt) => {
-    //   new HelpModal(this.container);
-    // });
-    // this.editMenu.menuContainer.addEventListener("click", (evt) => {
-    //   if (this.mouseAttachment) {
-    //     if (
-    //       !(
-    //         this.declareModel.relationConstraints.has(this.mouseAttachment) ||
-    //         this.declareModel.existenceConstraints.has(this.mouseAttachment)
-    //       )
-    //     ) {
-    //       this.mouseAttachment.destroy();
-    //     }
-    //   }
-    //   editMenuInteraction[evt.target.closest(".menuButton").getAttribute("data-action")](container);
-    // });
-    // this.ioMenu.menuContainer.addEventListener("click", (evt) => {
-    //   ioMenuInteraction[evt.target.closest(".menuButton").getAttribute("data-action")](container);
-    // });
-    // this.exportMenu.menuContainer.addEventListener("click", (evt) => {
-    //   exportMenuInteraction[evt.target.closest(".menuButton").getAttribute("data-action")](container);
-    // });
-    // this.navigationMenu.menuContainer.addEventListener("click", (evt) => {
-    //   navigationMenuInteraction[evt.target.closest(".menuButton").getAttribute("data-action")](container);
-    // });
-
-    // // Add context menu
-    // this.contextMenu = new ContextMenu(container, ["DELETE", "LOCK", "UNLOCK"]);
-    // this.contextMenu.menuContainer.addEventListener("click", (evt) => {
-    //   contextMenuInteraction[evt.target.getAttribute("data-action")](container);
-    //   this.contextMenu.close();
-    // });
-
-    // this.mode = "MOVE";
-    // this.editMenu.setActive("MOVE");
+    let container = this;
 
     // Add file input
     this.fileInput = document.createElement("input");
@@ -186,13 +130,5 @@ export class DeclareContainer {
       this.declareModel.autoLayout = false;
       this.declareModel.alignActivities();
     }, 10000);
-
-    // Apply selected mode
-    //     this.enableEdit = !this.enableEdit;
-    //     switchMode(this);
   }
-
-  //   switchMode() {
-  //     switchMode(this);
-  //   }
 }
