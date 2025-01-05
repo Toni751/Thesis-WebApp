@@ -218,4 +218,14 @@ export class HelperFunctions {
 
     return baseString;
   }
+
+  static getDeclareJsString(constraint: any): string {
+    let baseString = `${constraint.type.declareJsName}('${constraint.from}'`;
+    if (constraint.to !== null) {
+      baseString += `,'${constraint.to}'`;
+    }
+    baseString += ")";
+
+    return baseString;
+  }
 }

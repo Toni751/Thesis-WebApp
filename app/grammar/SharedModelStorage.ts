@@ -5,7 +5,7 @@ export class SharedModelStorage {
   private transitions: Set<string> = new Set();
   private andSubProcesses: Map<string, Activity[]> = new Map();
   private orSubProcesses: Map<string, Activity[]> = new Map();
-  private outputText: string = "";
+  private outputTexts: string[] = [];
 
   private constructor() {}
 
@@ -50,18 +50,18 @@ export class SharedModelStorage {
     return this.transitions;
   }
 
-  public setOutputText(text: string): void {
-    this.outputText = text;
+  public addOutputText(text: string): void {
+    this.outputTexts.push(text);
   }
 
-  public getOutputText(): string {
-    return this.outputText;
+  public getOutputTexts(): string[] {
+    return this.outputTexts;
   }
 
   public clear(): void {
     this.transitions = new Set();
     this.andSubProcesses = new Map();
     this.orSubProcesses = new Map();
-    this.outputText = "";
+    this.outputTexts = [];
   }
 }

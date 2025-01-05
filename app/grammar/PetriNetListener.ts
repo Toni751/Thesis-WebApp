@@ -252,7 +252,7 @@ export class PetriNetListener implements SentenceParser {
         output + `trans ${transition} in ${this.getPlacesString(inPlaces)} out ${this.getPlacesString(outPlaces)};\n`;
     }
 
-    this.modelStorage.setOutputText(output);
+    this.modelStorage.addOutputText(output);
   }
 
   private getPlacesString(places: string[]): string {

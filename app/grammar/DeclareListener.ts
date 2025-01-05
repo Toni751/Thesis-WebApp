@@ -158,16 +158,20 @@ export class DeclareListener implements SentenceParser {
   }
 
   public printAndSaveModel(): void {
-    let output: string = "";
+    let rumOutput: string = "";
+    let declareJsOutput: string = "";
+
     for (const activity of this.modelStorage.getTransitions()) {
-      output = output + `activity ${activity}\n`;
+      rumOutput = rumOutput + `activity ${activity}\n`;
     }
 
     for (const constraint of this.constraints) {
-      output = output + `${HelperFunctions.getRumString(JSON.parse(constraint))}\n`;
+      rumOutput = rumOutput + `${HelperFunctions.getRumString(JSON.parse(constraint))}\n`;
+      declareJsOutput = declareJsOutput + `${HelperFunctions.getDeclareJsString(JSON.parse(constraint))}\n`;
     }
 
-    this.modelStorage.setOutputText(output);
+    this.modelStorage.addOutputText(rumOutput);
+    this.modelStorage.addOutputText(declareJsOutput);
   }
 
   private handlePreAnd(fromActivity: string): void {

@@ -10,6 +10,7 @@ import { ERROR_MESSAGE } from "./constants";
 import { EXAMPLE_NL_TEXT } from "./grammar/examples/input/example_nl_text";
 import { EXAMPLE_NL_TEXT_CONVERTED } from "./grammar/examples/input/example_nl_text_converted";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { DeclareContainer } from "@/declare-js-main/declare-js/main.js";
 
 const PETRI_NET = "petriNet";
 const DECLARE = "declare";
@@ -17,7 +18,8 @@ export default function Home() {
   const [text, setText] = useState(EXAMPLE_NL_TEXT_CONVERTED);
   const [nlText, setNlText] = useState(EXAMPLE_NL_TEXT);
   const [petriNet, setPetriNet] = useState("");
-  const [declare, setDeclare] = useState("");
+  const [declareRum, setDeclareRum] = useState("");
+  const [declareJs, setDeclareJs] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -28,10 +30,18 @@ export default function Home() {
     setIsLoading(true);
 
     const conversions = await getConvertedText(textToConvert);
-    setPetriNet(conversions[0]);
-    setDeclare(conversions[1]);
-    if (!conversions[0].startsWith(ERROR_MESSAGE)) {
-      graphvizToSVG(tpn2graphviz(conversions[0]));
+    setPetriNet(conversions[0][0]);
+    setDeclareRum(conversions[1][0]);
+    setDeclareJs(conversions[1].length > 1 ? conversions[1][1] : "");
+    if (!conversions[0][0].startsWith(ERROR_MESSAGE)) {
+      graphvizToSVG(tpn2graphviz(conversions[0][0]));
+    }
+    if (!conversions[1][0].startsWith(ERROR_MESSAGE)) {
+      const container = document.getElementById("declareContainer");
+      if (container) {
+        container.innerHTML = "";
+      }
+      new DeclareContainer(conversions[1].length > 1 ? conversions[1][1] : "");
     }
 
     setIsLoading(false);
@@ -130,6 +140,7 @@ export default function Home() {
     instance().then((viz) => {
       const svg = viz.renderSVGElement(dotInput);
       const container = document.getElementById("graph");
+      console.log("Container", container);
       if (container) {
         container.innerHTML = "";
         container.appendChild(svg);
@@ -144,7 +155,7 @@ export default function Home() {
       model = petriNet;
       fileName = "PetriNet.tpn";
     } else if (type === DECLARE) {
-      model = declare;
+      model = declareRum;
       fileName = "DeclareModel.decl";
     }
 
@@ -211,6 +222,11 @@ export default function Home() {
           if (v === PETRI_NET && !petriNet.startsWith(ERROR_MESSAGE)) {
             graphvizToSVG(tpn2graphviz(petriNet));
           }
+          if (v === DECLARE && !declareRum.startsWith(ERROR_MESSAGE)) {
+            setTimeout(() => {
+              new DeclareContainer(declareJs);
+            }, 100);
+          }
         }}
       >
         <TabsList className="w-full">
@@ -241,16 +257,20 @@ export default function Home() {
           </button>
         </TabsContent>
         <TabsContent value={DECLARE} className="pb-6 h-full">
-          <Textarea
-            placeholder="The .decl value of the Declare Model..."
-            id="message"
-            className={`h-[90%] w-full overflow-auto ${declare.startsWith(ERROR_MESSAGE) && "text-red-600"}`}
-            value={declare}
-            disabled={true}
-          />
+          {declareRum.startsWith(ERROR_MESSAGE) ? (
+            <Textarea
+              placeholder="The .decl value of the Declare Model..."
+              id="message"
+              className={`h-[90%] w-full overflow-auto ${declareRum.startsWith(ERROR_MESSAGE) && "text-red-600"}`}
+              value={declareRum}
+              disabled={true}
+            />
+          ) : (
+            <div id="declareContainer" className={`h-[90%] w-full overflow-auto`}></div>
+          )}
           <button
             className="bg-blue-400 text-white rounded-md py-1 mt-2 h-[10%] w-full hover:bg-blue-500 disabled:bg-blue-200"
-            disabled={declare.startsWith(ERROR_MESSAGE)}
+            disabled={declareRum.startsWith(ERROR_MESSAGE)}
             onClick={() => handleDownloadFile(DECLARE)}
           >
             Download DECL file

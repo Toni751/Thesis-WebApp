@@ -16,9 +16,9 @@ import { schema } from "./grammar/JsonSchemaActivities";
 
 // the first element in the string is the .tpn file
 // the second element in the string is the .decl file
-export async function getConvertedText(text: string): Promise<string[]> {
+export async function getConvertedText(text: string): Promise<string[][]> {
   const modelStorage = SharedModelStorage.getInstance();
-  const conversions: string[] = [];
+  const conversions: string[][] = [];
   const sentenceParsers: SentenceParser[] = [];
   sentenceParsers.push(new PetriNetListener());
   sentenceParsers.push(new DeclareListener());
@@ -34,9 +34,9 @@ export async function getConvertedText(text: string): Promise<string[]> {
       const listener = new ContextListener(sentenceParser);
       let tree = parser.description();
       ParseTreeWalker.DEFAULT.walk(listener, tree);
-      conversions.push(modelStorage.getOutputText());
+      conversions.push(modelStorage.getOutputTexts());
     } catch (error) {
-      conversions.push(ERROR_MESSAGE + error);
+      conversions.push([ERROR_MESSAGE + error]);
     }
   }
 
