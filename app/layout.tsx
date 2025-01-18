@@ -3,8 +3,8 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Thesis - Web App",
-  description: "Web App to showcase the compiler for the thesis.",
+  title: "BeePath",
+  description: "Web App to showcase the BeePath project.",
 };
 
 export default function RootLayout({
