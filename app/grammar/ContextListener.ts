@@ -3,23 +3,23 @@ import { MScGrammarListener } from "./generated/MScGrammarListener";
 import {
   ActivityContext,
   AfterStatementContext,
-  AndPostActivityExpressionContext,
-  AndPreActivityExpressionContext,
-  AspContext,
-  AspIdContext,
+  AndEndActivityExpressionContext,
+  AndStartActivityExpressionContext,
+  AndSubProcessContext,
+  AndSubProcessIdContext,
   ClosingStatementContext,
   DescriptionContext,
   EventuallyExpressionContext,
   ImmediatelyExpressionContext,
   InitialStatementContext,
-  OrPostActivityExpressionContext,
-  OrPreActivityExpressionContext,
-  OspContext,
-  OspIdContext,
-  PostActivityExpressionContext,
-  RepeatSincePreActivityExpressionContext,
-  SequencePostActivityExpressionContext,
-  SequencePreActivityExpressionContext,
+  OrEndActivityExpressionContext,
+  OrStartActivityExpressionContext,
+  OrSubProcessContext,
+  OrSubProcessIdContext,
+  EndActivityExpressionContext,
+  RepeatSinceStartActivityExpressionContext,
+  SequenceEndActivityExpressionContext,
+  SequenceStartActivityExpressionContext,
   StatementContext,
 } from "./generated/MScGrammarParser";
 import { HelperFunctions } from "./HelperFunctions";
@@ -47,6 +47,10 @@ export class ContextListener implements MScGrammarListener {
   }
 
   public enterClosingStatement(ctx: ClosingStatementContext): void {
+    if (this.currentStatement.getPreActivities().length > 0 || this.currentStatement.getPostActivities().length > 0) {
+      this.statementNumber += 1;
+      this.currentStatement = new StatementMetadata(this.statementNumber);
+    }
     this.currentStatement.setStatementType(StatementType.CLOSING);
   }
 
@@ -63,43 +67,43 @@ export class ContextListener implements MScGrammarListener {
     }
   }
 
-  public enterAndPostActivityExpression(ctx: AndPostActivityExpressionContext): void {
+  public enterAndEndActivityExpression(ctx: AndEndActivityExpressionContext): void {
     this.currentStatement.setPostActivityType(PostActivityType.AND);
   }
 
-  public exitAndPostActivityExpression(ctx: AndPostActivityExpressionContext): void {
-    this.handleAndExpression(ctx.activity(), ctx.ospId());
+  public exitAndEndActivityExpression(ctx: AndEndActivityExpressionContext): void {
+    this.handleAndExpression(ctx.activity(), ctx.orSubProcessId());
   }
 
-  public enterAndPreActivityExpression(ctx: AndPreActivityExpressionContext): void {
+  public enterAndStartActivityExpression(ctx: AndStartActivityExpressionContext): void {
     this.currentStatement.setPreActivityType(PreActivityType.IMMEDIATELY_AND);
   }
 
-  public exitAndPreActivityExpression(ctx: AndPreActivityExpressionContext): void {
-    this.handleAndExpression(ctx.activity(), ctx.ospId());
+  public exitAndStartActivityExpression(ctx: AndStartActivityExpressionContext): void {
+    this.handleAndExpression(ctx.activity(), ctx.orSubProcessId());
   }
 
-  public enterOrPostActivityExpression(ctx: OrPostActivityExpressionContext): void {
+  public enterOrEndActivityExpression(ctx: OrEndActivityExpressionContext): void {
     this.currentStatement.setPostActivityType(PostActivityType.OR);
   }
 
-  public exitOrPostActivityExpression(ctx: OrPostActivityExpressionContext): void {
-    this.handleOrExpression(ctx.activity(), ctx.aspId());
+  public exitOrEndActivityExpression(ctx: OrEndActivityExpressionContext): void {
+    this.handleOrExpression(ctx.activity(), ctx.andSubProcessId());
   }
 
-  public enterOrPreActivityExpression(ctx: OrPreActivityExpressionContext): void {
+  public enterOrStartActivityExpression(ctx: OrStartActivityExpressionContext): void {
     this.currentStatement.setPreActivityType(PreActivityType.IMMEDIATELY_OR);
   }
 
-  public exitOrPreActivityExpression(ctx: OrPreActivityExpressionContext): void {
-    this.handleOrExpression(ctx.activity(), ctx.aspId());
+  public exitOrStartActivityExpression(ctx: OrStartActivityExpressionContext): void {
+    this.handleOrExpression(ctx.activity(), ctx.andSubProcessId());
   }
 
-  public enterRepeatSincePreActivityExpression(ctx: RepeatSincePreActivityExpressionContext): void {
+  public enterRepeatSinceStartActivityExpression(ctx: RepeatSinceStartActivityExpressionContext): void {
     this.currentStatement.setPreActivityType(PreActivityType.IMMEDIATELY_REPEAT_SINCE);
   }
 
-  public exitRepeatSincePreActivityExpression(ctx: RepeatSincePreActivityExpressionContext): void {
+  public exitRepeatSinceStartActivityExpression(ctx: RepeatSinceStartActivityExpressionContext): void {
     this.currentStatement.addActivity(
       new Activity(HelperFunctions.getActivityText(ctx.activity(0).WORD()), ActivityType.REPEAT_SINCE_ACTIVITY)
     );
@@ -108,22 +112,22 @@ export class ContextListener implements MScGrammarListener {
         this.handleSequenceExpression(ctx.activity(i));
       }
     }
-    for (let i = 0; i < ctx.aspId().length; i++) {
+    for (let i = 0; i < ctx.andSubProcessId().length; i++) {
       this.currentStatement.addActivity(
-        new Activity(HelperFunctions.getActivityText(ctx.aspId(i).WORD()), ActivityType.AND_SUBPROCESS)
+        new Activity(HelperFunctions.getActivityText(ctx.andSubProcessId(i).WORD()), ActivityType.AND_SUBPROCESS)
       );
     }
   }
 
-  public enterPostActivityExpression(ctx: PostActivityExpressionContext): void {
+  public enterEndActivityExpression(ctx: EndActivityExpressionContext): void {
     this.currentStatement.setCurrentContextType(ContextType.POST_ACTIVITY);
   }
 
-  public enterSequencePostActivityExpression(ctx: SequencePostActivityExpressionContext): void {
+  public enterSequenceEndActivityExpression(ctx: SequenceEndActivityExpressionContext): void {
     this.currentStatement.setPostActivityType(PostActivityType.SEQUENCE);
   }
 
-  public exitSequencePostActivityExpression(ctx: SequencePostActivityExpressionContext): void {
+  public exitSequenceEndActivityExpression(ctx: SequenceEndActivityExpressionContext): void {
     this.handleSequenceExpression(ctx.activity());
   }
 
@@ -204,28 +208,28 @@ export class ContextListener implements MScGrammarListener {
     }
   }
 
-  public enterAsp(ctx: AspContext): void {
+  public enterAndSubProcess(ctx: AndSubProcessContext): void {
     this.currentStatement.setStatementType(StatementType.AND_SUBPROCESS);
   }
 
-  public exitAsp(ctx: AspContext): void {
+  public exitAndSubProcess(ctx: AndSubProcessContext): void {
     const aspActivities: Activity[] = ctx
       .activity()
       .map((a) => new Activity(HelperFunctions.getActivityText(a.WORD()), ActivityType.ACTIVITY));
-    const aspId: string = HelperFunctions.getActivityText(ctx.aspId().WORD());
+    const aspId: string = HelperFunctions.getActivityText(ctx.andSubProcessId().WORD());
     this.modelStorage.addAndSubProcess(aspId, aspActivities);
     this.sentenceParser.handleAspDeclaration(aspId);
   }
 
-  public enterOsp(ctx: OspContext): void {
+  public enterOrSubProcess(ctx: OrSubProcessContext): void {
     this.currentStatement.setStatementType(StatementType.OR_SUBPROCESS);
   }
 
-  public exitOsp(ctx: OspContext): void {
+  public exitOrSubProcess(ctx: OrSubProcessContext): void {
     const ospActivities: Activity[] = ctx
       .activity()
       .map((a) => new Activity(HelperFunctions.getActivityText(a.WORD()), ActivityType.ACTIVITY));
-    const ospId: string = HelperFunctions.getActivityText(ctx.ospId().WORD());
+    const ospId: string = HelperFunctions.getActivityText(ctx.orSubProcessId().WORD());
     this.modelStorage.addOrSubProcess(ospId, ospActivities);
     this.sentenceParser.handleOspDeclaration(ospId);
   }
@@ -238,7 +242,7 @@ export class ContextListener implements MScGrammarListener {
     this.currentStatement.setCurrentContextType(ContextType.PRE_ACTIVITY_EVENTUALLY);
   }
 
-  public enterSequencePreActivityExpression(ctx: SequencePreActivityExpressionContext): void {
+  public enterSequenceStartActivityExpression(ctx: SequenceStartActivityExpressionContext): void {
     if (this.currentStatement.getCurrentContextType() === ContextType.PRE_ACTIVITY_EVENTUALLY) {
       this.currentStatement.setPreActivityType(PreActivityType.EVENTUALLY_SEQUENCE);
     } else if (this.currentStatement.getCurrentContextType() === ContextType.PRE_ACTIVITY_IMMEDIATELY) {
@@ -246,7 +250,7 @@ export class ContextListener implements MScGrammarListener {
     }
   }
 
-  public exitSequencePreActivityExpression(ctx: SequencePreActivityExpressionContext): void {
+  public exitSequenceStartActivityExpression(ctx: SequenceStartActivityExpressionContext): void {
     this.handleSequenceExpression(ctx.activity());
   }
 
@@ -272,7 +276,7 @@ export class ContextListener implements MScGrammarListener {
     );
   }
 
-  private handleAndExpression(activities: ActivityContext[], ospIdContexts: OspIdContext[]): void {
+  private handleAndExpression(activities: ActivityContext[], ospIdContexts: OrSubProcessIdContext[]): void {
     for (const activity of activities) {
       this.currentStatement.addActivity(
         new Activity(HelperFunctions.getActivityText(activity.WORD()), ActivityType.ACTIVITY)
@@ -285,7 +289,7 @@ export class ContextListener implements MScGrammarListener {
     }
   }
 
-  private handleOrExpression(activities: ActivityContext[], aspIdContexts: AspIdContext[]): void {
+  private handleOrExpression(activities: ActivityContext[], aspIdContexts: AndSubProcessIdContext[]): void {
     for (const activity of activities) {
       this.currentStatement.addActivity(
         new Activity(HelperFunctions.getActivityText(activity.WORD()), ActivityType.ACTIVITY)

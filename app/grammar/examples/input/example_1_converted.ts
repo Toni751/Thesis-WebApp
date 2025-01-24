@@ -19,5 +19,4 @@ After "validate sample" ends, immediately either repeat since "arrange appointme
 After "perform analysis" ends, immediately start "validate results".
 After "validate results" ends, immediately start "diagnose with prescribe therapy".
 
-After either (prescribe treatment) ends or "deny consent" ends or "fill out examination form" ends, immediately start "finish process".
-After "finish process" ends, the process finishes.`;
+After either (prescribe treatment) ends or "deny consent" ends or "fill out examination form" ends, the process finishes.`;

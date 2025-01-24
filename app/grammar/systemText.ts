@@ -4,50 +4,50 @@ Convert the given text into a structured text which follows the grammar given be
 """
 grammar MScGrammar ;
 description
-    : leadingStatement initialStatement statementList;
+    : leadingText statementList;
 
-leadingStatement
+leadingText
     : 'The following textual description follows the closed-world assumption, meaning that only the activities specified can be executed in the specified order. Any possible activity and execution that is not specified is considered impossible.' (NEWLINE)*;
-initialStatement
-    : 'Initially start ' activity '.' (NEWLINE)*;
 
 statementList
-    : statement (statement)*?;
+    : initialStatement (statement)*? closingStatement;
+initialStatement
+    : 'Initially start ' activity '.' (NEWLINE)*;
 statement
-    : (afterStatement | closingStatement | asp | osp) (NEWLINE)*;
+    : (afterStatement | closingStatement | andSubProcess | orSubProcess) (NEWLINE)*;
 closingStatement
-    : (sequencePostActivityExpression | andPostActivityExpression | orPostActivityExpression) ', the process finishes.' ;
+    : (sequenceEndActivityExpression | andEndActivityExpression | orEndActivityExpression) ', the process finishes.' ;
 
 afterStatement
-    : (sequencePostActivityExpression | andPostActivityExpression | orPostActivityExpression) ', ' (sequencePreActivityExpression | andPreActivityExpression | orPreActivityExpression | repeatSincePreActivityExpression | eventuallyExpression) '.';
-asp
-    : aspId ': ' activity ' and ' activity (' and ' activity)*? '.';
-osp
-    : ospId ': ' activity ' or ' activity (' or ' activity)*? '.';
+    : (sequenceEndActivityExpression | andEndActivityExpression | orEndActivityExpression) ', ' (sequenceStartActivityExpression | andStartActivityExpression | orStartActivityExpression | repeatSinceStartActivityExpression | eventuallyExpression) '.';
+andSubProcess
+    : andSubProcessId ': ' activity ' and ' activity (' and ' activity)*? '.';
+orSubProcess
+    : orSubProcessId ': ' activity ' or ' activity (' or ' activity)*? '.';
 
-sequencePreActivityExpression
+sequenceStartActivityExpression
     : 'immediately start ' activity;
-andPreActivityExpression
-    : 'immediately start ' (activity | ospId) ' and start ' (activity | ospId) (' and start ' (activity | ospId))*? ;
-orPreActivityExpression
-    : 'immediately either start ' (activity | aspId) ' or start ' (activity | aspId) (' or start ' (activity | aspId))*? ;
-repeatSincePreActivityExpression
-    : 'immediately either repeat since ' activity ' or start ' (activity | aspId) (' or start ' (activity | aspId))*?;
+andStartActivityExpression
+    : 'immediately start ' (activity | orSubProcessId) ' and start ' (activity | orSubProcessId) (' and start ' (activity | orSubProcessId))*? ;
+orStartActivityExpression
+    : 'immediately either start ' (activity | andSubProcessId) ' or start ' (activity | andSubProcessId) (' or start ' (activity | andSubProcessId))*? ;
+repeatSinceStartActivityExpression
+    : 'immediately either repeat since ' activity ' or start ' (activity | andSubProcessId) (' or start ' (activity | andSubProcessId))*?;
 eventuallyExpression
     : 'eventually start ' activity;
 
-sequencePostActivityExpression
+sequenceEndActivityExpression
     : 'After ' activity ' ends';
-andPostActivityExpression
-    : 'After ' (activity | ospId) ' ends and ' ((activity | ospId) ' ends and ')*? (activity | ospId) ' ends';
-orPostActivityExpression
-    : 'After either ' (activity | aspId) ' ends or ' ((activity | aspId) ' ends or ')*? (activity | aspId) ' ends';
+andEndActivityExpression
+    : 'After ' (activity | orSubProcessId) ' ends and ' ((activity | orSubProcessId) ' ends and ')*? (activity | orSubProcessId) ' ends';
+orEndActivityExpression
+    : 'After either ' (activity | andSubProcessId) ' ends or ' ((activity | andSubProcessId) ' ends or ')*? (activity | andSubProcessId) ' ends';
 
 activity
     : '"' WORD (SPACE WORD)*? '"' ;
-aspId
+andSubProcessId
     : '(' WORD (SPACE WORD)*? ')' ;
-ospId
+orSubProcessId
     : '(' WORD (SPACE WORD)*? ')' ;
 WORD
     : [a-zA-Z0-9]+ ;
