@@ -104,6 +104,7 @@ export class DeclareListener implements SentenceParser {
   public handlePreSequencePostAnd(): void {
     for (const preActivity of this.currentStatement.getPreActivities()) {
       const toActivity = preActivity.getName();
+      this.constraints.add(JSON.stringify(new DeclareConstraint(DeclareConstraintType.EXACTLY_ONE, toActivity, null)));
       for (const postActivity of this.currentStatement.getPostActivities()) {
         const fromActivity = postActivity.getName();
         if (postActivity.getType() === ActivityType.ACTIVITY) {
@@ -199,10 +200,10 @@ export class DeclareListener implements SentenceParser {
       }
     }
 
-    this.constraints = HelperFunctions.mergeSets(
-      this.constraints,
-      HelperFunctions.getCoExistenceConstraintsForAnd(andActivities).map((dc) => JSON.stringify(dc))
-    );
+    // this.constraints = HelperFunctions.mergeSets(
+    //   this.constraints,
+    //   HelperFunctions.getCoExistenceConstraintsForAnd(andActivities).map((dc) => JSON.stringify(dc))
+    // );
   }
 
   private handlePreOr(previousActivity: string): void {
